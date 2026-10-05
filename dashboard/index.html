@@ -1,17 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>CarePredict AI</title>
 
-
     <style>
-
         * {
             box-sizing: border-box;
             margin: 0;
@@ -19,60 +14,32 @@
             font-family: Arial, sans-serif;
         }
 
-
         body {
-            background: #f3f6fa;
-            color: #1f2937;
+            background: #f4f7fb;
+            color: #222;
         }
 
-
-        /* HEADER */
-
         header {
-            background: #0f3d5e;
+            background: linear-gradient(135deg, #0f766e, #2563eb);
             color: white;
-            padding: 28px 20px;
+            padding: 25px;
             text-align: center;
         }
 
-
         header h1 {
-            font-size: 34px;
+            font-size: 32px;
             margin-bottom: 8px;
         }
 
-
         header p {
             font-size: 16px;
-            opacity: 0.9;
         }
-
-
-        /* MAIN */
 
         .container {
-            max-width: 1150px;
-            margin: 30px auto;
-            padding: 0 20px;
+            width: 92%;
+            max-width: 1200px;
+            margin: 25px auto;
         }
-
-
-        .card {
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            margin-bottom: 25px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-        }
-
-
-        .card h2 {
-            margin-bottom: 20px;
-            color: #0f3d5e;
-        }
-
-
-        /* STATUS CARDS */
 
         .status-grid {
             display: grid;
@@ -81,1059 +48,615 @@
             margin-bottom: 25px;
         }
 
-
         .status-card {
             background: white;
-            padding: 20px;
+            padding: 18px;
             border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
             text-align: center;
-            border-top: 5px solid #16a34a;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
         }
-
-
-        .status-icon {
-            font-size: 30px;
-            margin-bottom: 10px;
-        }
-
 
         .status-card h3 {
-            color: #0f3d5e;
             margin-bottom: 8px;
+            font-size: 16px;
         }
-
 
         .online {
             color: #16a34a;
             font-weight: bold;
         }
 
-
         .ready {
             color: #2563eb;
             font-weight: bold;
         }
 
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+        }
 
-        /* FORM */
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.08);
+            margin-bottom: 25px;
+        }
+
+        .card h2 {
+            margin-bottom: 20px;
+            color: #1e3a8a;
+        }
 
         .form-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 18px;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
         }
-
 
         .form-group {
             display: flex;
             flex-direction: column;
         }
 
-
         .form-group label {
+            margin-bottom: 6px;
             font-weight: bold;
-            margin-bottom: 7px;
+            font-size: 14px;
         }
-
 
         input,
         select {
-            padding: 12px;
-            border: 1px solid #cbd5e1;
-            border-radius: 8px;
-            font-size: 15px;
+            padding: 11px;
+            border: 1px solid #ccc;
+            border-radius: 7px;
+            font-size: 14px;
         }
-
-
-        input:focus,
-        select:focus {
-            outline: none;
-            border-color: #0f3d5e;
-        }
-
-
-        /* BUTTON */
 
         button {
             width: 100%;
-            margin-top: 25px;
-            padding: 15px;
+            margin-top: 20px;
+            padding: 14px;
             border: none;
-            border-radius: 10px;
-            background: #0f3d5e;
+            border-radius: 8px;
+            background: #2563eb;
             color: white;
-            font-size: 17px;
+            font-size: 16px;
             font-weight: bold;
             cursor: pointer;
         }
 
-
         button:hover {
-            background: #155d86;
+            background: #1d4ed8;
         }
-
-
-        /* RESULT */
 
         .result {
             text-align: center;
+            padding: 25px;
+            border-radius: 12px;
+            background: #f8fafc;
         }
 
-
-        .risk {
-            font-size: 58px;
+        .risk-number {
+            font-size: 52px;
             font-weight: bold;
             margin: 15px 0;
         }
 
-
-        .risk-level {
+        .risk-badge {
             display: inline-block;
-            padding: 10px 28px;
+            padding: 10px 25px;
             border-radius: 25px;
-            font-size: 20px;
+            font-size: 18px;
             font-weight: bold;
-            background: #e5e7eb;
         }
-
 
         .low {
             background: #dcfce7;
             color: #166534;
         }
 
-
         .medium {
             background: #fef3c7;
             color: #92400e;
         }
-
 
         .high {
             background: #fee2e2;
             color: #991b1b;
         }
 
-
-        /* ALERT */
-
         .alert-box {
             margin-top: 20px;
             padding: 15px;
             border-radius: 10px;
             font-weight: bold;
-            background: #eef2f7;
-            color: #374151;
+            display: none;
         }
 
-
-        /* HISTORY TABLE */
-
-        .table-container {
+        .history-card {
             overflow-x: auto;
         }
-
 
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 10px;
+            margin-top: 15px;
         }
-
 
         th,
         td {
-            padding: 14px;
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
             text-align: center;
-            border-bottom: 1px solid #e5e7eb;
-        }
-
-
-        th {
-            background: #0f3d5e;
-            color: white;
-        }
-
-
-        tr:hover {
-            background: #f8fafc;
-        }
-
-
-        .history-low {
-            color: #166534;
-            font-weight: bold;
-        }
-
-
-        .history-medium {
-            color: #92400e;
-            font-weight: bold;
-        }
-
-
-        .history-high {
-            color: #991b1b;
-            font-weight: bold;
-        }
-
-
-        .clear-button {
-            width: auto;
-            padding: 10px 18px;
-            margin-top: 15px;
-            background: #64748b;
             font-size: 14px;
         }
 
-
-        .clear-button:hover {
-            background: #475569;
+        th {
+            background: #eff6ff;
         }
 
-
-        /* SYSTEM INFORMATION */
-
-        .info {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
+        .clear-btn {
+            background: #dc2626;
+            margin-top: 15px;
         }
 
-
-        .info-box {
-            background: #f8fafc;
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
+        .clear-btn:hover {
+            background: #b91c1c;
         }
 
-
-        .info-box h3 {
-            color: #0f3d5e;
-            margin-bottom: 8px;
+        .system-info p {
+            margin: 10px 0;
         }
 
-
-        .note {
-            margin-top: 20px;
-            font-size: 13px;
-            color: #6b7280;
+        .error {
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            display: none;
         }
-
-
-        /* FOOTER */
 
         footer {
             text-align: center;
             padding: 25px;
-            color: #6b7280;
+            color: #666;
             font-size: 14px;
         }
 
-
-        /* MOBILE */
-
-        @media (max-width: 850px) {
+        @media (max-width: 800px) {
 
             .status-grid {
-                grid-template-columns: repeat(2, 1fr);
+                grid-template-columns: 1fr 1fr;
             }
 
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
         }
 
+        @media (max-width: 500px) {
 
-        @media (max-width: 700px) {
+            .status-grid {
+                grid-template-columns: 1fr;
+            }
 
             .form-grid {
                 grid-template-columns: 1fr;
             }
 
-
-            .info {
-                grid-template-columns: 1fr;
-            }
-
-
-            .status-grid {
-                grid-template-columns: 1fr;
-            }
-
-
             header h1 {
-                font-size: 27px;
+                font-size: 25px;
             }
-
-
-            .risk {
-                font-size: 45px;
-            }
-
-
-            th,
-            td {
-                padding: 10px 6px;
-                font-size: 13px;
-            }
-
         }
-
     </style>
-
 </head>
-
-
 
 <body>
 
+<header>
+    <h1>🏥 CarePredict AI</h1>
+    <p>Hospital Readmission Risk Prediction System</p>
+</header>
 
-    <!-- HEADER -->
+<div class="container">
 
-    <header>
+    <!-- SYSTEM STATUS -->
 
-        <h1>🏥 CarePredict AI</h1>
+    <div class="status-grid">
 
-        <p>
-            Hospital Readmission Risk Prediction System
-        </p>
-
-    </header>
-
-
-
-    <div class="container">
-
-
-        <!-- SYSTEM STATUS -->
-
-        <div class="status-grid">
-
-
-            <div class="status-card">
-
-                <div class="status-icon">
-                    🧠
-                </div>
-
-                <h3>AI Model</h3>
-
-                <p class="online">
-                    ● ONLINE
-                </p>
-
-            </div>
-
-
-            <div class="status-card">
-
-                <div class="status-icon">
-                    🌐
-                </div>
-
-                <h3>Backend</h3>
-
-                <p class="online">
-                    ● CONNECTED
-                </p>
-
-            </div>
-
-
-            <div class="status-card">
-
-                <div class="status-icon">
-                    📡
-                </div>
-
-                <h3>IoT System</h3>
-
-                <p class="ready">
-                    ● READY
-                </p>
-
-            </div>
-
-
-            <div class="status-card">
-
-                <div class="status-icon">
-                    🚨
-                </div>
-
-                <h3>Alert System</h3>
-
-                <p class="ready">
-                    ● READY
-                </p>
-
-            </div>
-
-
+        <div class="status-card">
+            <h3>🧠 AI Model</h3>
+            <p class="online">● ONLINE</p>
         </div>
 
-
-
-        <!-- PATIENT INFORMATION -->
-
-        <div class="card">
-
-            <h2>👤 Patient Information</h2>
-
-
-            <div class="form-grid">
-
-
-                <div class="form-group">
-
-                    <label>Patient ID</label>
-
-                    <input
-                        type="text"
-                        id="patientId"
-                        placeholder="Example: P001"
-                    >
-
-                </div>
-
-
-                <div class="form-group">
-
-                    <label>Age</label>
-
-                    <input
-                        type="number"
-                        id="age"
-                        value="45"
-                    >
-
-                </div>
-
-
-                <div class="form-group">
-
-                    <label>Previous Admissions</label>
-
-                    <input
-                        type="number"
-                        id="previousAdmissions"
-                        value="0"
-                    >
-
-                </div>
-
-
-                <div class="form-group">
-
-                    <label>Previous Stay Days</label>
-
-                    <input
-                        type="number"
-                        id="previousStay"
-                        value="3"
-                    >
-
-                </div>
-
-
-                <div class="form-group">
-
-                    <label>Heart Rate (BPM)</label>
-
-                    <input
-                        type="number"
-                        id="heartRate"
-                        value="76"
-                    >
-
-                </div>
-
-
-                <div class="form-group">
-
-                    <label>SpO₂ (%)</label>
-
-                    <input
-                        type="number"
-                        id="spo2"
-                        value="98"
-                    >
-
-                </div>
-
-
-                <div class="form-group">
-
-                    <label>Temperature (°C)</label>
-
-                    <input
-                        type="number"
-                        step="0.1"
-                        id="temperature"
-                        value="36.6"
-                    >
-
-                </div>
-
-
-                <div class="form-group">
-
-                    <label>Systolic BP (mmHg)</label>
-
-                    <input
-                        type="number"
-                        id="systolicBP"
-                        value="120"
-                    >
-
-                </div>
-
-
-                <div class="form-group">
-
-                    <label>Diabetes</label>
-
-                    <select id="diabetes">
-
-                        <option value="0">
-                            No
-                        </option>
-
-                        <option value="1">
-                            Yes
-                        </option>
-
-                    </select>
-
-                </div>
-
-
-                <div class="form-group">
-
-                    <label>Hypertension</label>
-
-                    <select id="hypertension">
-
-                        <option value="0">
-                            No
-                        </option>
-
-                        <option value="1">
-                            Yes
-                        </option>
-
-                    </select>
-
-                </div>
-
-
-            </div>
-
-
-
-            <button onclick="predictRisk()">
-
-                🔍 Predict Readmission Risk
-
-            </button>
-
+        <div class="status-card">
+            <h3>🌐 Backend</h3>
+            <p class="online">● CONNECTED</p>
         </div>
 
-
-
-        <!-- AI RESULT -->
-
-        <div class="card result">
-
-            <h2>🤖 AI Risk Assessment</h2>
-
-
-            <div
-                class="risk"
-                id="riskPercentage"
-            >
-                --%
-            </div>
-
-
-            <div
-                class="risk-level"
-                id="riskLevel"
-            >
-                Waiting for prediction
-            </div>
-
-
-            <div
-                class="alert-box"
-                id="alertBox"
-            >
-                Enter patient information and run prediction.
-            </div>
-
-
-            <p class="note">
-
-                AI prototype for hackathon demonstration.
-                Not a clinical diagnostic tool.
-
-            </p>
-
+        <div class="status-card">
+            <h3>📡 IoT System</h3>
+            <p class="ready">● READY</p>
         </div>
 
-
-
-        <!-- PATIENT HISTORY -->
-
-        <div class="card">
-
-            <h2>📋 Patient Risk History</h2>
-
-
-            <div class="table-container">
-
-                <table>
-
-                    <thead>
-
-                        <tr>
-
-                            <th>Patient ID</th>
-
-                            <th>Risk %</th>
-
-                            <th>Risk Level</th>
-
-                            <th>Status</th>
-
-                        </tr>
-
-                    </thead>
-
-
-                    <tbody id="historyBody">
-
-                    </tbody>
-
-                </table>
-
-            </div>
-
-
-            <button
-                class="clear-button"
-                onclick="clearHistory()"
-            >
-
-                🗑️ Clear History
-
-            </button>
-
+        <div class="status-card">
+            <h3>🚨 Alert System</h3>
+            <p class="ready">● READY</p>
         </div>
-
-
-
-        <!-- SYSTEM INFORMATION -->
-
-        <div class="card">
-
-            <h2>📊 System Information</h2>
-
-
-            <div class="info">
-
-
-                <div class="info-box">
-
-                    <h3>🧠 AI Model</h3>
-
-                    <p>
-                        Logistic Regression
-                    </p>
-
-                </div>
-
-
-                <div class="info-box">
-
-                    <h3>🌐 Backend</h3>
-
-                    <p>
-                        Python + Flask
-                    </p>
-
-                </div>
-
-
-                <div class="info-box">
-
-                    <h3>📡 Future IoT</h3>
-
-                    <p>
-                        ESP32 + Sensors
-                    </p>
-
-                </div>
-
-
-            </div>
-
-        </div>
-
 
     </div>
 
 
+    <div class="main-grid">
 
-    <footer>
+        <!-- PATIENT INPUT -->
 
-        CarePredict AI © 2026 |
-        Healthcare AI Hackathon Prototype
+        <div class="card">
 
-    </footer>
+            <h2>👨‍⚕️ Patient Information</h2>
 
+            <div class="form-grid">
 
+                <div class="form-group">
+                    <label>Patient ID</label>
+                    <input type="text" id="patientId" value="P001">
+                </div>
 
-    <script>
+                <div class="form-group">
+                    <label>Age</label>
+                    <input type="number" id="age" value="45">
+                </div>
 
+                <div class="form-group">
+                    <label>Previous Admissions</label>
+                    <input type="number" id="previousAdmissions" value="0">
+                </div>
 
-        async function predictRisk() {
+                <div class="form-group">
+                    <label>Previous Stay (Days)</label>
+                    <input type="number" id="previousStay" value="3">
+                </div>
 
+                <div class="form-group">
+                    <label>Heart Rate (BPM)</label>
+                    <input type="number" id="heartRate" value="76">
+                </div>
 
-            /* GET PATIENT ID */
+                <div class="form-group">
+                    <label>SpO₂ (%)</label>
+                    <input type="number" id="spo2" value="98">
+                </div>
 
-            const patientId =
-                document.getElementById(
-                    "patientId"
-                ).value;
+                <div class="form-group">
+                    <label>Temperature (°C)</label>
+                    <input type="number" step="0.1" id="temperature" value="36.6">
+                </div>
 
+                <div class="form-group">
+                    <label>Systolic BP</label>
+                    <input type="number" id="systolicBP" value="120">
+                </div>
 
-            /* CHECK PATIENT ID */
+                <div class="form-group">
+                    <label>Diabetes</label>
 
-            if (patientId.trim() === "") {
+                    <select id="diabetes">
+                        <option value="0">No</option>
+                        <option value="1">Yes</option>
+                    </select>
 
-                alert(
-                    "Please enter Patient ID."
-                );
+                </div>
 
-                return;
+                <div class="form-group">
+                    <label>Hypertension</label>
 
-            }
+                    <select id="hypertension">
+                        <option value="0">No</option>
+                        <option value="1">Yes</option>
+                    </select>
 
+                </div>
 
-            /* GET PATIENT DATA */
+            </div>
 
-            const patient = {
+            <button onclick="predictRisk()">
+                🔍 Predict Readmission Risk
+            </button>
 
-                Age:
-                    Number(
-                        document.getElementById(
-                            "age"
-                        ).value
-                    ),
+            <div id="errorBox" class="error"></div>
 
-                Previous_Admissions:
-                    Number(
-                        document.getElementById(
-                            "previousAdmissions"
-                        ).value
-                    ),
+        </div>
 
-                Previous_Stay_Days:
-                    Number(
-                        document.getElementById(
-                            "previousStay"
-                        ).value
-                    ),
 
-                Heart_Rate:
-                    Number(
-                        document.getElementById(
-                            "heartRate"
-                        ).value
-                    ),
+        <!-- AI RESULT -->
 
-                SpO2:
-                    Number(
-                        document.getElementById(
-                            "spo2"
-                        ).value
-                    ),
+        <div class="card">
 
-                Temperature:
-                    Number(
-                        document.getElementById(
-                            "temperature"
-                        ).value
-                    ),
+            <h2>🤖 AI Risk Assessment</h2>
 
-                Systolic_BP:
-                    Number(
-                        document.getElementById(
-                            "systolicBP"
-                        ).value
-                    ),
+            <div class="result">
 
-                Diabetes:
-                    Number(
-                        document.getElementById(
-                            "diabetes"
-                        ).value
-                    ),
+                <p>Predicted Readmission Risk</p>
 
-                Hypertension:
-                    Number(
-                        document.getElementById(
-                            "hypertension"
-                        ).value
-                    )
+                <div id="riskPercentage" class="risk-number">
+                    --
+                </div>
 
-            };
+                <div id="riskBadge" class="risk-badge">
+                    Waiting for prediction
+                </div>
 
+                <div id="alertBox" class="alert-box"></div>
 
-            try {
+            </div>
 
+        </div>
 
-                /* SEND DATA TO FLASK */
+    </div>
 
-                const response =
-                    await fetch(
-                        "http://127.0.0.1:5000/predict",
-                        {
 
-                            method: "POST",
+    <!-- HISTORY -->
 
-                            headers: {
-                                "Content-Type":
-                                    "application/json"
-                            },
+    <div class="card history-card">
 
-                            body:
-                                JSON.stringify(
-                                    patient
-                                )
+        <h2>📊 Patient Risk History</h2>
 
-                        }
-                    );
+        <table>
 
+            <thead>
 
-                /* CHECK RESPONSE */
+                <tr>
+                    <th>Patient ID</th>
+                    <th>Risk %</th>
+                    <th>Risk Level</th>
+                    <th>Status</th>
+                </tr>
 
-                if (!response.ok) {
+            </thead>
 
-                    throw new Error(
-                        "Backend error"
-                    );
+            <tbody id="historyTable">
 
-                }
+            </tbody>
 
+        </table>
 
-                /* GET AI RESULT */
+        <button class="clear-btn" onclick="clearHistory()">
+            🗑️ Clear History
+        </button>
 
-                const result =
-                    await response.json();
+    </div>
 
 
-                /* DISPLAY RISK */
+    <!-- SYSTEM INFORMATION -->
 
-                document.getElementById(
-                    "riskPercentage"
-                ).innerText =
-                    result.risk_percentage + "%";
+    <div class="card system-info">
 
+        <h2>⚙️ System Information</h2>
 
-                /* DISPLAY LEVEL */
+        <p>🧠 <strong>AI Model:</strong> Logistic Regression</p>
 
-                const level =
-                    document.getElementById(
-                        "riskLevel"
-                    );
+        <p>🐍 <strong>Backend:</strong> Python + Flask</p>
 
+        <p>📡 <strong>IoT:</strong> ESP32 + Sensors</p>
 
-                level.innerText =
-                    result.risk_level;
+        <p>📊 <strong>Prediction:</strong> Hospital Readmission Risk</p>
 
+        <p>💡 <strong>Data:</strong> Synthetic demonstration data</p>
 
-                /* REMOVE OLD COLORS */
+    </div>
 
-                level.classList.remove(
-                    "low",
-                    "medium",
-                    "high"
-                );
+</div>
 
 
-                /* ALERT */
+<footer>
 
-                const alertBox =
-                    document.getElementById(
-                        "alertBox"
-                    );
+    CarePredict AI — Healthcare AI Hackathon Prototype
 
+</footer>
 
-                let statusText = "";
 
+<script>
 
+async function predictRisk() {
 
-                /* LOW */
+    const errorBox = document.getElementById("errorBox");
 
-                if (
-                    result.risk_level === "LOW"
-                ) {
+    errorBox.style.display = "none";
 
-                    level.classList.add(
-                        "low"
-                    );
+    const patient = {
 
-                    alertBox.innerText =
-                        "🟢 Low Risk — Routine monitoring";
+        Age: Number(document.getElementById("age").value),
 
-                    statusText =
-                        "🟢 Routine Monitoring";
+        Previous_Admissions:
+            Number(document.getElementById("previousAdmissions").value),
 
-                }
+        Previous_Stay_Days:
+            Number(document.getElementById("previousStay").value),
 
+        Heart_Rate:
+            Number(document.getElementById("heartRate").value),
 
+        SpO2:
+            Number(document.getElementById("spo2").value),
 
-                /* MEDIUM */
+        Temperature:
+            Number(document.getElementById("temperature").value),
 
-                else if (
-                    result.risk_level === "MEDIUM"
-                ) {
+        Systolic_BP:
+            Number(document.getElementById("systolicBP").value),
 
-                    level.classList.add(
-                        "medium"
-                    );
+        Diabetes:
+            Number(document.getElementById("diabetes").value),
 
-                    alertBox.innerText =
-                        "🟡 Medium Risk — Increased monitoring";
+        Hypertension:
+            Number(document.getElementById("hypertension").value)
+    };
 
-                    statusText =
-                        "🟡 Increased Monitoring";
 
-                }
+    try {
 
+        const response = await fetch("/predict", {
 
+            method: "POST",
 
-                /* HIGH */
+            headers: {
+                "Content-Type": "application/json"
+            },
 
-                else {
+            body: JSON.stringify(patient)
 
-                    level.classList.add(
-                        "high"
-                    );
+        });
 
-                    alertBox.innerText =
-                        "🔴 High Risk — Immediate attention recommended";
 
-                    statusText =
-                        "🔴 Immediate Attention";
+        if (!response.ok) {
 
-                }
-
-
-
-                /* ADD TO HISTORY */
-
-                const historyBody =
-                    document.getElementById(
-                        "historyBody"
-                    );
-
-
-                const row =
-                    document.createElement(
-                        "tr"
-                    );
-
-
-                let levelClass = "";
-
-
-                if (
-                    result.risk_level === "LOW"
-                ) {
-
-                    levelClass =
-                        "history-low";
-
-                }
-
-                else if (
-                    result.risk_level === "MEDIUM"
-                ) {
-
-                    levelClass =
-                        "history-medium";
-
-                }
-
-                else {
-
-                    levelClass =
-                        "history-high";
-
-                }
-
-
-                row.innerHTML = `
-
-                    <td>
-                        ${patientId}
-                    </td>
-
-                    <td>
-                        ${result.risk_percentage}%
-                    </td>
-
-                    <td class="${levelClass}">
-                        ${result.risk_level}
-                    </td>
-
-                    <td>
-                        ${statusText}
-                    </td>
-
-                `;
-
-
-                historyBody.prepend(row);
-
-
-            }
-
-
-            catch (error) {
-
-
-                alert(
-                    "Cannot connect to CarePredict AI backend.\n\n" +
-                    "Please make sure Flask server is running."
-                );
-
-
-                console.error(error);
-
-            }
+            throw new Error("Backend prediction failed");
 
         }
 
 
+        const result = await response.json();
 
-        /* CLEAR HISTORY */
 
-        function clearHistory() {
+        // Display risk percentage
 
-            document.getElementById(
-                "historyBody"
-            ).innerHTML = "";
+        document.getElementById("riskPercentage").innerText =
+            result.risk_percentage + "%";
+
+
+        // Risk badge
+
+        const badge = document.getElementById("riskBadge");
+
+        badge.innerText = result.risk_level;
+
+        badge.className = "risk-badge";
+
+
+        // Alert
+
+        const alertBox = document.getElementById("alertBox");
+
+        alertBox.style.display = "block";
+
+
+        if (result.risk_level === "LOW") {
+
+            badge.classList.add("low");
+
+            alertBox.className = "alert-box low";
+
+            alertBox.innerText =
+                "🟢 Low Risk — Routine monitoring";
+
+        }
+
+        else if (result.risk_level === "MEDIUM") {
+
+            badge.classList.add("medium");
+
+            alertBox.className = "alert-box medium";
+
+            alertBox.innerText =
+                "🟡 Medium Risk — Increased monitoring";
+
+        }
+
+        else {
+
+            badge.classList.add("high");
+
+            alertBox.className = "alert-box high";
+
+            alertBox.innerText =
+                "🔴 High Risk — Immediate attention recommended";
 
         }
 
 
-    </script>
+        // Add history
 
+        addHistory(
+
+            document.getElementById("patientId").value,
+
+            result.risk_percentage,
+
+            result.risk_level
+
+        );
+
+    }
+
+
+    catch (error) {
+
+        errorBox.style.display = "block";
+
+        errorBox.innerText =
+            "❌ Cannot connect to CarePredict AI backend.";
+
+        console.error(error);
+
+    }
+
+}
+
+
+function addHistory(patientId, risk, level) {
+
+    const table =
+        document.getElementById("historyTable");
+
+
+    const row =
+        document.createElement("tr");
+
+
+    let status = "Routine";
+
+    if (level === "MEDIUM") {
+
+        status = "Monitor";
+
+    }
+
+    if (level === "HIGH") {
+
+        status = "Attention Required";
+
+    }
+
+
+    row.innerHTML = `
+
+        <td>${patientId}</td>
+
+        <td>${risk}%</td>
+
+        <td>${level}</td>
+
+        <td>${status}</td>
+
+    `;
+
+
+    table.prepend(row);
+
+}
+
+
+function clearHistory() {
+
+    document.getElementById("historyTable").innerHTML = "";
+
+}
+
+</script>
 
 </body>
-
 </html>

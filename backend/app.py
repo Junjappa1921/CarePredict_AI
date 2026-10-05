@@ -1,152 +1,87 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 import joblib
 import pandas as pd
+import os
 
+# Project paths
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+MODEL_PATH = os.path.join(BASE_DIR, "readmission_model.pkl")
+DASHBOARD_PATH = os.path.join(BASE_DIR, "dashboard")
 
 # Create Flask application
 app = Flask(__name__)
-
-# Allow dashboard to communicate with backend
 CORS(app)
 
-
 # Load trained AI model
-model = joblib.load("../readmission_model.pkl")
+model = joblib.load(MODEL_PATH)
 
 
-# Home route
+# Serve dashboard
 @app.route("/")
 def home():
+    return send_from_directory(DASHBOARD_PATH, "index.html")
 
-    return "CarePredict AI Backend is Running!"
 
-
-# Prediction route
+# Prediction API
 @app.route("/predict", methods=["POST"])
 def predict():
 
-    # Receive patient data
     data = request.get_json()
 
-
-    # Get patient information
-    age = data["Age"]
-
-    previous_admissions = data["Previous_Admissions"]
-
-    previous_stay_days = data["Previous_Stay_Days"]
-
-    heart_rate = data["Heart_Rate"]
-
-    spo2 = data["SpO2"]
-
-    temperature = data["Temperature"]
-
-    systolic_bp = data["Systolic_BP"]
-
-    diabetes = data["Diabetes"]
-
-    hypertension = data["Hypertension"]
-
-
-    # Prepare patient data
     patient_data = [[
-
-        age,
-
-        previous_admissions,
-
-        previous_stay_days,
-
-        heart_rate,
-
-        spo2,
-
-        temperature,
-
-        systolic_bp,
-
-        diabetes,
-
-        hypertension
-
+        data["Age"],
+        data["Previous_Admissions"],
+        data["Previous_Stay_Days"],
+        data["Heart_Rate"],
+        data["SpO2"],
+        data["Temperature"],
+        data["Systolic_BP"],
+        data["Diabetes"],
+        data["Hypertension"]
     ]]
 
-
-    # Give feature names to the data
     patient_data = pd.DataFrame(
-
         patient_data,
-
         columns=[
-
             "Age",
-
             "Previous_Admissions",
-
             "Previous_Stay_Days",
-
             "Heart_Rate",
-
             "SpO2",
-
             "Temperature",
-
             "Systolic_BP",
-
             "Diabetes",
-
             "Hypertension"
-
         ]
-
     )
 
+    # AI prediction
+    risk_probability = model.predict_proba(patient_data)[0][1]
 
-    # Calculate readmission risk
-    risk_probability = model.predict_proba(
-        patient_data
-    )[0][1]
-
-
-    # Convert probability to percentage
     risk_percentage = round(
         risk_probability * 100,
         2
     )
 
-
-    # Determine risk level
-
+    # Risk level
     if risk_percentage < 40:
-
         risk_level = "LOW"
-
     elif risk_percentage < 70:
-
         risk_level = "MEDIUM"
-
     else:
-
         risk_level = "HIGH"
 
-
-    # Send result to dashboard
     return jsonify({
-
-        "risk_percentage":
-            risk_percentage,
-
-        "risk_level":
-            risk_level
-
+        "risk_percentage": risk_percentage,
+        "risk_level": risk_level
     })
 
 
-# Start Flask server
+# Start server
 if __name__ == "__main__":
-
     app.run(
+        host="0.0.0.0",
+        port=5000,
         debug=True
     )
