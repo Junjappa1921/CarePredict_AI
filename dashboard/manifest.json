@@ -1,0 +1,12 @@
+{
+  "name": "CarePredict AI",
+  "short_name": "CarePredict",
+  "description": "AI-powered hospital readmission risk prediction system",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#2563eb",
+  "orientation": "portrait",
+  "lang": "en"
+}
