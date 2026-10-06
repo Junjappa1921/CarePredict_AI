@@ -21,8 +21,12 @@ model = joblib.load(MODEL_PATH)
 @app.route("/")
 def home():
     return send_from_directory(DASHBOARD_PATH, "index.html")
-
-
+@app.route("/manifest.json")
+def manifest():
+    return send_from_directory(DASHBOARD_PATH, "manifest.json")
+@app.route("/service-worker.js")
+def service_worker():
+    return send_from_directory(DASHBOARD_PATH, "service-worker.js")
 # Prediction API
 @app.route("/predict", methods=["POST"])
 def predict():

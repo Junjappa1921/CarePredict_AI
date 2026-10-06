@@ -1,576 +1,965 @@
 <!DOCTYPE html>
+
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>CarePredict AI</title>
+```
+<title>CarePredict AI</title>
 
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-        }
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#2563eb">
 
-        body {
-            background: #f4f7fb;
-            color: #222;
-        }
+<style>
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+    }
 
-        header {
-            background: linear-gradient(135deg, #0f766e, #2563eb);
-            color: white;
-            padding: 25px;
-            text-align: center;
-        }
+    body {
+        background: #f1f5f9;
+        color: #172033;
+        min-height: 100vh;
+    }
 
-        header h1 {
-            font-size: 32px;
-            margin-bottom: 8px;
-        }
+    /* HEADER */
 
-        header p {
-            font-size: 16px;
-        }
+    header {
+        background: linear-gradient(135deg, #0f766e, #2563eb);
+        color: white;
+        padding: 28px 20px;
+        text-align: center;
+        border-radius: 0 0 28px 28px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+    }
 
-        .container {
-            width: 92%;
-            max-width: 1200px;
-            margin: 25px auto;
-        }
+    .logo {
+        width: 64px;
+        height: 64px;
+        margin: 0 auto 12px;
+        background: rgba(255, 255, 255, 0.18);
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 32px;
+    }
+
+    header h1 {
+        font-size: 30px;
+        margin-bottom: 7px;
+    }
+
+    header p {
+        font-size: 14px;
+        opacity: 0.92;
+    }
+
+    /* MAIN */
+
+    .container {
+        width: 94%;
+        max-width: 1150px;
+        margin: 22px auto;
+    }
+
+    /* STATUS */
+
+    .status-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 12px;
+        margin-bottom: 22px;
+    }
+
+    .status-card {
+        background: white;
+        padding: 16px 10px;
+        border-radius: 16px;
+        text-align: center;
+        box-shadow: 0 4px 14px rgba(15, 23, 42, 0.07);
+        border: 1px solid #e5e7eb;
+    }
+
+    .status-icon {
+        font-size: 23px;
+        margin-bottom: 6px;
+    }
+
+    .status-card h3 {
+        font-size: 13px;
+        margin-bottom: 5px;
+    }
+
+    .online {
+        color: #16a34a;
+        font-weight: bold;
+        font-size: 12px;
+    }
+
+    .ready {
+        color: #2563eb;
+        font-weight: bold;
+        font-size: 12px;
+    }
+
+    /* GRID */
+
+    .main-grid {
+        display: grid;
+        grid-template-columns: 1.15fr 0.85fr;
+        gap: 20px;
+    }
+
+    .card {
+        background: white;
+        padding: 23px;
+        border-radius: 20px;
+        box-shadow: 0 4px 18px rgba(15, 23, 42, 0.07);
+        border: 1px solid #e5e7eb;
+        margin-bottom: 20px;
+    }
+
+    .card-title {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        margin-bottom: 20px;
+    }
+
+    .card-title h2 {
+        color: #1e3a8a;
+        font-size: 20px;
+    }
+
+    /* FORM */
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .form-group label {
+        margin-bottom: 7px;
+        font-weight: bold;
+        font-size: 13px;
+        color: #475569;
+    }
+
+    input,
+    select {
+        width: 100%;
+        padding: 13px;
+        border: 1px solid #cbd5e1;
+        border-radius: 10px;
+        font-size: 14px;
+        background: #f8fafc;
+        outline: none;
+        transition: 0.2s;
+    }
+
+    input:focus,
+    select:focus {
+        border-color: #2563eb;
+        background: white;
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.10);
+    }
+
+    /* BUTTON */
+
+    .predict-btn {
+        width: 100%;
+        margin-top: 20px;
+        padding: 15px;
+        border: none;
+        border-radius: 12px;
+        background: linear-gradient(135deg, #2563eb, #1d4ed8);
+        color: white;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        box-shadow: 0 6px 14px rgba(37, 99, 235, 0.25);
+        transition: 0.2s;
+    }
+
+    .predict-btn:hover {
+        transform: translateY(-1px);
+    }
+
+    .predict-btn:active {
+        transform: scale(0.98);
+    }
+
+    /* RESULT */
+
+    .result {
+        text-align: center;
+        padding: 28px 18px;
+        border-radius: 18px;
+        background: linear-gradient(180deg, #f8fafc, #eef2ff);
+    }
+
+    .result-label {
+        color: #64748b;
+        font-size: 14px;
+        font-weight: bold;
+    }
+
+    .risk-number {
+        font-size: 58px;
+        font-weight: bold;
+        color: #1e3a8a;
+        margin: 15px 0;
+    }
+
+    .risk-badge {
+        display: inline-block;
+        padding: 10px 28px;
+        border-radius: 30px;
+        font-size: 17px;
+        font-weight: bold;
+        background: #e2e8f0;
+        color: #475569;
+    }
+
+    .low {
+        background: #dcfce7;
+        color: #166534;
+    }
+
+    .medium {
+        background: #fef3c7;
+        color: #92400e;
+    }
+
+    .high {
+        background: #fee2e2;
+        color: #991b1b;
+    }
+
+    .alert-box {
+        margin-top: 18px;
+        padding: 14px;
+        border-radius: 12px;
+        font-weight: bold;
+        font-size: 14px;
+        display: none;
+    }
+
+    /* ERROR */
+
+    .error {
+        background: #fee2e2;
+        color: #991b1b;
+        padding: 13px;
+        border-radius: 10px;
+        margin-top: 15px;
+        display: none;
+        font-size: 14px;
+        font-weight: bold;
+    }
+
+    /* HISTORY */
+
+    .history-card {
+        overflow-x: auto;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+    }
+
+    th,
+    td {
+        padding: 13px 10px;
+        border-bottom: 1px solid #e2e8f0;
+        text-align: center;
+        font-size: 13px;
+    }
+
+    th {
+        background: #eff6ff;
+        color: #1e3a8a;
+    }
+
+    .clear-btn {
+        background: #dc2626;
+        color: white;
+        border: none;
+        width: 100%;
+        padding: 13px;
+        border-radius: 10px;
+        margin-top: 15px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    /* SYSTEM INFO */
+
+    .system-info p {
+        margin: 12px 0;
+        padding: 11px;
+        background: #f8fafc;
+        border-radius: 9px;
+        font-size: 14px;
+    }
+
+    /* FOOTER */
+
+    footer {
+        text-align: center;
+        padding: 25px 15px;
+        color: #64748b;
+        font-size: 12px;
+    }
+
+    .prototype-note {
+        margin-top: 10px;
+        color: #94a3b8;
+    }
+
+    /* MOBILE */
+
+    @media (max-width: 850px) {
 
         .status-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 15px;
-            margin-bottom: 25px;
-        }
-
-        .status-card {
-            background: white;
-            padding: 18px;
-            border-radius: 12px;
-            text-align: center;
-            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
-        }
-
-        .status-card h3 {
-            margin-bottom: 8px;
-            font-size: 16px;
-        }
-
-        .online {
-            color: #16a34a;
-            font-weight: bold;
-        }
-
-        .ready {
-            color: #2563eb;
-            font-weight: bold;
+            grid-template-columns: 1fr 1fr;
         }
 
         .main-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 25px;
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 520px) {
+
+        header {
+            padding: 23px 15px;
+            border-radius: 0 0 22px 22px;
+        }
+
+        header h1 {
+            font-size: 25px;
+        }
+
+        .container {
+            width: 94%;
+            margin-top: 15px;
+        }
+
+        .status-grid {
+            gap: 9px;
+        }
+
+        .status-card {
+            padding: 13px 5px;
+            border-radius: 13px;
+        }
+
+        .status-card h3 {
+            font-size: 11px;
         }
 
         .card {
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 3px 15px rgba(0,0,0,0.08);
-            margin-bottom: 25px;
+            padding: 17px;
+            border-radius: 17px;
         }
 
-        .card h2 {
-            margin-bottom: 20px;
-            color: #1e3a8a;
+        .card-title h2 {
+            font-size: 18px;
         }
 
         .form-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .form-group label {
-            margin-bottom: 6px;
-            font-weight: bold;
-            font-size: 14px;
+            grid-template-columns: 1fr;
+            gap: 12px;
         }
 
         input,
         select {
-            padding: 11px;
-            border: 1px solid #ccc;
-            border-radius: 7px;
-            font-size: 14px;
-        }
-
-        button {
-            width: 100%;
-            margin-top: 20px;
             padding: 14px;
-            border: none;
-            border-radius: 8px;
-            background: #2563eb;
-            color: white;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background: #1d4ed8;
-        }
-
-        .result {
-            text-align: center;
-            padding: 25px;
-            border-radius: 12px;
-            background: #f8fafc;
         }
 
         .risk-number {
             font-size: 52px;
-            font-weight: bold;
-            margin: 15px 0;
-        }
-
-        .risk-badge {
-            display: inline-block;
-            padding: 10px 25px;
-            border-radius: 25px;
-            font-size: 18px;
-            font-weight: bold;
-        }
-
-        .low {
-            background: #dcfce7;
-            color: #166534;
-        }
-
-        .medium {
-            background: #fef3c7;
-            color: #92400e;
-        }
-
-        .high {
-            background: #fee2e2;
-            color: #991b1b;
-        }
-
-        .alert-box {
-            margin-top: 20px;
-            padding: 15px;
-            border-radius: 10px;
-            font-weight: bold;
-            display: none;
-        }
-
-        .history-card {
-            overflow-x: auto;
         }
 
         table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
+            min-width: 550px;
         }
+    }
+</style>
+```
 
-        th,
-        td {
-            padding: 12px;
-            border-bottom: 1px solid #ddd;
-            text-align: center;
-            font-size: 14px;
-        }
-
-        th {
-            background: #eff6ff;
-        }
-
-        .clear-btn {
-            background: #dc2626;
-            margin-top: 15px;
-        }
-
-        .clear-btn:hover {
-            background: #b91c1c;
-        }
-
-        .system-info p {
-            margin: 10px 0;
-        }
-
-        .error {
-            background: #fee2e2;
-            color: #991b1b;
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 15px;
-            display: none;
-        }
-
-        footer {
-            text-align: center;
-            padding: 25px;
-            color: #666;
-            font-size: 14px;
-        }
-
-        @media (max-width: 800px) {
-
-            .status-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-
-            .main-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        @media (max-width: 500px) {
-
-            .status-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .form-grid {
-                grid-template-columns: 1fr;
-            }
-
-            header h1 {
-                font-size: 25px;
-            }
-        }
-    </style>
 </head>
 
 <body>
 
 <header>
-    <h1>🏥 CarePredict AI</h1>
-    <p>Hospital Readmission Risk Prediction System</p>
+
+```
+<div class="logo">
+    🏥
+</div>
+
+<h1>CarePredict AI</h1>
+
+<p>Hospital Readmission Risk Prediction System</p>
+```
+
 </header>
 
 <div class="container">
 
-    <!-- SYSTEM STATUS -->
+```
+<!-- SYSTEM STATUS -->
 
-    <div class="status-grid">
+<div class="status-grid">
 
-        <div class="status-card">
-            <h3>🧠 AI Model</h3>
-            <p class="online">● ONLINE</p>
-        </div>
-
-        <div class="status-card">
-            <h3>🌐 Backend</h3>
-            <p class="online">● CONNECTED</p>
-        </div>
-
-        <div class="status-card">
-            <h3>📡 IoT System</h3>
-            <p class="ready">● READY</p>
-        </div>
-
-        <div class="status-card">
-            <h3>🚨 Alert System</h3>
-            <p class="ready">● READY</p>
-        </div>
-
+    <div class="status-card">
+        <div class="status-icon">🧠</div>
+        <h3>AI Model</h3>
+        <p class="online">● ONLINE</p>
     </div>
 
+    <div class="status-card">
+        <div class="status-icon">🌐</div>
+        <h3>Backend</h3>
+        <p class="online">● CONNECTED</p>
+    </div>
 
-    <div class="main-grid">
+    <div class="status-card">
+        <div class="status-icon">📡</div>
+        <h3>IoT System</h3>
+        <p class="ready">● READY</p>
+    </div>
 
-        <!-- PATIENT INPUT -->
+    <div class="status-card">
+        <div class="status-icon">🚨</div>
+        <h3>Alerts</h3>
+        <p class="ready">● READY</p>
+    </div>
 
-        <div class="card">
+</div>
 
-            <h2>👨‍⚕️ Patient Information</h2>
 
-            <div class="form-grid">
+<!-- MAIN -->
 
-                <div class="form-group">
-                    <label>Patient ID</label>
-                    <input type="text" id="patientId" value="P001">
-                </div>
+<div class="main-grid">
 
-                <div class="form-group">
-                    <label>Age</label>
-                    <input type="number" id="age" value="45">
-                </div>
 
-                <div class="form-group">
-                    <label>Previous Admissions</label>
-                    <input type="number" id="previousAdmissions" value="0">
-                </div>
+    <!-- PATIENT INFORMATION -->
 
-                <div class="form-group">
-                    <label>Previous Stay (Days)</label>
-                    <input type="number" id="previousStay" value="3">
-                </div>
+    <div class="card">
 
-                <div class="form-group">
-                    <label>Heart Rate (BPM)</label>
-                    <input type="number" id="heartRate" value="76">
-                </div>
+        <div class="card-title">
+            <span>👨‍⚕️</span>
+            <h2>Patient Information</h2>
+        </div>
 
-                <div class="form-group">
-                    <label>SpO₂ (%)</label>
-                    <input type="number" id="spo2" value="98">
-                </div>
 
-                <div class="form-group">
-                    <label>Temperature (°C)</label>
-                    <input type="number" step="0.1" id="temperature" value="36.6">
-                </div>
+        <div class="form-grid">
 
-                <div class="form-group">
-                    <label>Systolic BP</label>
-                    <input type="number" id="systolicBP" value="120">
-                </div>
 
-                <div class="form-group">
-                    <label>Diabetes</label>
+            <div class="form-group">
 
-                    <select id="diabetes">
-                        <option value="0">No</option>
-                        <option value="1">Yes</option>
-                    </select>
+                <label>Patient ID</label>
 
-                </div>
-
-                <div class="form-group">
-                    <label>Hypertension</label>
-
-                    <select id="hypertension">
-                        <option value="0">No</option>
-                        <option value="1">Yes</option>
-                    </select>
-
-                </div>
+                <input
+                    type="text"
+                    id="patientId"
+                    value="P001"
+                >
 
             </div>
 
-            <button onclick="predictRisk()">
-                🔍 Predict Readmission Risk
-            </button>
 
-            <div id="errorBox" class="error"></div>
+            <div class="form-group">
 
-        </div>
+                <label>Age</label>
+
+                <input
+                    type="number"
+                    id="age"
+                    value="45"
+                    min="1"
+                    max="120"
+                >
+
+            </div>
 
 
-        <!-- AI RESULT -->
+            <div class="form-group">
 
-        <div class="card">
+                <label>Previous Admissions</label>
 
-            <h2>🤖 AI Risk Assessment</h2>
+                <input
+                    type="number"
+                    id="previousAdmissions"
+                    value="0"
+                    min="0"
+                >
 
-            <div class="result">
+            </div>
 
-                <p>Predicted Readmission Risk</p>
 
-                <div id="riskPercentage" class="risk-number">
-                    --
-                </div>
+            <div class="form-group">
 
-                <div id="riskBadge" class="risk-badge">
-                    Waiting for prediction
-                </div>
+                <label>Previous Stay (Days)</label>
 
-                <div id="alertBox" class="alert-box"></div>
+                <input
+                    type="number"
+                    id="previousStay"
+                    value="3"
+                    min="1"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>Heart Rate (BPM)</label>
+
+                <input
+                    type="number"
+                    id="heartRate"
+                    value="76"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>SpO₂ (%)</label>
+
+                <input
+                    type="number"
+                    id="spo2"
+                    value="98"
+                    min="50"
+                    max="100"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>Temperature (°C)</label>
+
+                <input
+                    type="number"
+                    step="0.1"
+                    id="temperature"
+                    value="36.6"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>Systolic BP</label>
+
+                <input
+                    type="number"
+                    id="systolicBP"
+                    value="120"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>Diabetes</label>
+
+                <select id="diabetes">
+
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+
+                </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>Hypertension</label>
+
+                <select id="hypertension">
+
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+
+                </select>
 
             </div>
 
         </div>
 
-    </div>
 
-
-    <!-- HISTORY -->
-
-    <div class="card history-card">
-
-        <h2>📊 Patient Risk History</h2>
-
-        <table>
-
-            <thead>
-
-                <tr>
-                    <th>Patient ID</th>
-                    <th>Risk %</th>
-                    <th>Risk Level</th>
-                    <th>Status</th>
-                </tr>
-
-            </thead>
-
-            <tbody id="historyTable">
-
-            </tbody>
-
-        </table>
-
-        <button class="clear-btn" onclick="clearHistory()">
-            🗑️ Clear History
+        <button
+            class="predict-btn"
+            onclick="predictRisk()"
+        >
+            🔍 Predict Readmission Risk
         </button>
 
+
+        <div
+            id="errorBox"
+            class="error"
+        ></div>
+
     </div>
 
 
-    <!-- SYSTEM INFORMATION -->
+    <!-- AI RESULT -->
 
-    <div class="card system-info">
+    <div class="card">
 
-        <h2>⚙️ System Information</h2>
+        <div class="card-title">
+            <span>🤖</span>
+            <h2>AI Risk Assessment</h2>
+        </div>
 
-        <p>🧠 <strong>AI Model:</strong> Logistic Regression</p>
 
-        <p>🐍 <strong>Backend:</strong> Python + Flask</p>
+        <div class="result">
 
-        <p>📡 <strong>IoT:</strong> ESP32 + Sensors</p>
+            <p class="result-label">
+                Predicted Readmission Risk
+            </p>
 
-        <p>📊 <strong>Prediction:</strong> Hospital Readmission Risk</p>
 
-        <p>💡 <strong>Data:</strong> Synthetic demonstration data</p>
+            <div
+                id="riskPercentage"
+                class="risk-number"
+            >
+                --
+            </div>
+
+
+            <div
+                id="riskBadge"
+                class="risk-badge"
+            >
+                Waiting for prediction
+            </div>
+
+
+            <div
+                id="alertBox"
+                class="alert-box"
+            ></div>
+
+        </div>
 
     </div>
 
 </div>
 
 
+<!-- HISTORY -->
+
+<div class="card history-card">
+
+    <div class="card-title">
+        <span>📊</span>
+        <h2>Patient Risk History</h2>
+    </div>
+
+
+    <table>
+
+        <thead>
+
+            <tr>
+                <th>Patient ID</th>
+                <th>Risk %</th>
+                <th>Risk Level</th>
+                <th>Status</th>
+            </tr>
+
+        </thead>
+
+
+        <tbody id="historyTable"></tbody>
+
+    </table>
+
+
+    <button
+        class="clear-btn"
+        onclick="clearHistory()"
+    >
+        🗑️ Clear History
+    </button>
+
+</div>
+
+
+<!-- SYSTEM INFORMATION -->
+
+<div class="card system-info">
+
+    <div class="card-title">
+        <span>⚙️</span>
+        <h2>System Information</h2>
+    </div>
+
+
+    <p>
+        🧠 <strong>AI Model:</strong>
+        Logistic Regression
+    </p>
+
+
+    <p>
+        🐍 <strong>Backend:</strong>
+        Python + Flask
+    </p>
+
+
+    <p>
+        📡 <strong>IoT:</strong>
+        ESP32 + Sensors
+    </p>
+
+
+    <p>
+        📊 <strong>Prediction:</strong>
+        Hospital Readmission Risk
+    </p>
+
+
+    <p>
+        💡 <strong>Data:</strong>
+        Synthetic demonstration data
+    </p>
+
+</div>
+```
+
+</div>
+
 <footer>
 
-    CarePredict AI — Healthcare AI Hackathon Prototype
+```
+<strong>CarePredict AI</strong>
+— Healthcare AI Hackathon Prototype
+
+<div class="prototype-note">
+    Prototype for demonstration purposes. Not a clinical diagnostic system.
+</div>
+```
 
 </footer>
 
-
 <script>
+
+
+/* =========================
+   AI PREDICTION
+========================= */
 
 async function predictRisk() {
 
-    const errorBox = document.getElementById("errorBox");
+    const errorBox =
+        document.getElementById("errorBox");
 
     errorBox.style.display = "none";
 
+
     const patient = {
 
-        Age: Number(document.getElementById("age").value),
+        Age:
+            Number(
+                document.getElementById("age").value
+            ),
 
         Previous_Admissions:
-            Number(document.getElementById("previousAdmissions").value),
+            Number(
+                document.getElementById(
+                    "previousAdmissions"
+                ).value
+            ),
 
         Previous_Stay_Days:
-            Number(document.getElementById("previousStay").value),
+            Number(
+                document.getElementById(
+                    "previousStay"
+                ).value
+            ),
 
         Heart_Rate:
-            Number(document.getElementById("heartRate").value),
+            Number(
+                document.getElementById(
+                    "heartRate"
+                ).value
+            ),
 
         SpO2:
-            Number(document.getElementById("spo2").value),
+            Number(
+                document.getElementById(
+                    "spo2"
+                ).value
+            ),
 
         Temperature:
-            Number(document.getElementById("temperature").value),
+            Number(
+                document.getElementById(
+                    "temperature"
+                ).value
+            ),
 
         Systolic_BP:
-            Number(document.getElementById("systolicBP").value),
+            Number(
+                document.getElementById(
+                    "systolicBP"
+                ).value
+            ),
 
         Diabetes:
-            Number(document.getElementById("diabetes").value),
+            Number(
+                document.getElementById(
+                    "diabetes"
+                ).value
+            ),
 
         Hypertension:
-            Number(document.getElementById("hypertension").value)
+            Number(
+                document.getElementById(
+                    "hypertension"
+                ).value
+            )
     };
 
 
     try {
 
-        const response = await fetch("/predict", {
+        const response =
+            await fetch(
+                "/predict",
+                {
+                    method: "POST",
 
-            method: "POST",
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
 
-            headers: {
-                "Content-Type": "application/json"
-            },
-
-            body: JSON.stringify(patient)
-
-        });
+                    body:
+                        JSON.stringify(patient)
+                }
+            );
 
 
         if (!response.ok) {
 
-            throw new Error("Backend prediction failed");
+            throw new Error(
+                "Backend prediction failed"
+            );
 
         }
 
 
-        const result = await response.json();
+        const result =
+            await response.json();
 
 
-        // Display risk percentage
+        /* RISK PERCENTAGE */
 
-        document.getElementById("riskPercentage").innerText =
+        document.getElementById(
+            "riskPercentage"
+        ).innerText =
             result.risk_percentage + "%";
 
 
-        // Risk badge
+        /* RISK BADGE */
 
-        const badge = document.getElementById("riskBadge");
-
-        badge.innerText = result.risk_level;
-
-        badge.className = "risk-badge";
-
-
-        // Alert
-
-        const alertBox = document.getElementById("alertBox");
-
-        alertBox.style.display = "block";
+        const badge =
+            document.getElementById(
+                "riskBadge"
+            );
 
 
-        if (result.risk_level === "LOW") {
+        badge.innerText =
+            result.risk_level;
+
+
+        badge.className =
+            "risk-badge";
+
+
+        /* ALERT */
+
+        const alertBox =
+            document.getElementById(
+                "alertBox"
+            );
+
+
+        alertBox.style.display =
+            "block";
+
+
+        if (
+            result.risk_level ===
+            "LOW"
+        ) {
 
             badge.classList.add("low");
 
-            alertBox.className = "alert-box low";
+            alertBox.className =
+                "alert-box low";
 
             alertBox.innerText =
                 "🟢 Low Risk — Routine monitoring";
 
         }
 
-        else if (result.risk_level === "MEDIUM") {
 
-            badge.classList.add("medium");
+        else if (
+            result.risk_level ===
+            "MEDIUM"
+        ) {
 
-            alertBox.className = "alert-box medium";
+            badge.classList.add(
+                "medium"
+            );
+
+            alertBox.className =
+                "alert-box medium";
 
             alertBox.innerText =
                 "🟡 Medium Risk — Increased monitoring";
 
         }
 
+
         else {
 
-            badge.classList.add("high");
+            badge.classList.add(
+                "high"
+            );
 
-            alertBox.className = "alert-box high";
+            alertBox.className =
+                "alert-box high";
 
             alertBox.innerText =
                 "🔴 High Risk — Immediate attention recommended";
@@ -578,16 +967,16 @@ async function predictRisk() {
         }
 
 
-        // Add history
+        /* HISTORY */
 
         addHistory(
-
-            document.getElementById("patientId").value,
+            document.getElementById(
+                "patientId"
+            ).value,
 
             result.risk_percentage,
 
             result.risk_level
-
         );
 
     }
@@ -595,7 +984,8 @@ async function predictRisk() {
 
     catch (error) {
 
-        errorBox.style.display = "block";
+        errorBox.style.display =
+            "block";
 
         errorBox.innerText =
             "❌ Cannot connect to CarePredict AI backend.";
@@ -607,27 +997,46 @@ async function predictRisk() {
 }
 
 
-function addHistory(patientId, risk, level) {
+/* =========================
+   HISTORY
+========================= */
+
+function addHistory(
+    patientId,
+    risk,
+    level
+) {
 
     const table =
-        document.getElementById("historyTable");
+        document.getElementById(
+            "historyTable"
+        );
 
 
     const row =
         document.createElement("tr");
 
 
-    let status = "Routine";
+    let status =
+        "Routine";
 
-    if (level === "MEDIUM") {
 
-        status = "Monitor";
+    if (
+        level === "MEDIUM"
+    ) {
+
+        status =
+            "Monitor";
 
     }
 
-    if (level === "HIGH") {
 
-        status = "Attention Required";
+    if (
+        level === "HIGH"
+    ) {
+
+        status =
+            "Attention Required";
 
     }
 
@@ -638,7 +1047,9 @@ function addHistory(patientId, risk, level) {
 
         <td>${risk}%</td>
 
-        <td>${level}</td>
+        <td>
+            <strong>${level}</strong>
+        </td>
 
         <td>${status}</td>
 
@@ -650,9 +1061,54 @@ function addHistory(patientId, risk, level) {
 }
 
 
+/* =========================
+   CLEAR HISTORY
+========================= */
+
 function clearHistory() {
 
-    document.getElementById("historyTable").innerHTML = "";
+    document.getElementById(
+        "historyTable"
+    ).innerHTML = "";
+
+}
+
+
+/* =========================
+   SERVICE WORKER
+========================= */
+
+if (
+    "serviceWorker"
+    in navigator
+) {
+
+    window.addEventListener(
+        "load",
+        () => {
+
+            navigator.serviceWorker
+                .register(
+                    "/service-worker.js"
+                )
+                .then(() => {
+
+                    console.log(
+                        "CarePredict Service Worker registered"
+                    );
+
+                })
+                .catch(error => {
+
+                    console.error(
+                        "Service Worker registration failed:",
+                        error
+                    );
+
+                });
+
+        }
+    );
 
 }
 
