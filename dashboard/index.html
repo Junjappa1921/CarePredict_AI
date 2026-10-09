@@ -1,1118 +1,883 @@
+```html
 <!DOCTYPE html>
-
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-```
-<title>CarePredict AI</title>
+    <title>CarePredict AI | Hospital Readmission Prediction</title>
 
-<link rel="manifest" href="/manifest.json">
-<meta name="theme-color" content="#2563eb">
-
-<style>
-    * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-        font-family: Arial, sans-serif;
-    }
-
-    body {
-        background: #f1f5f9;
-        color: #172033;
-        min-height: 100vh;
-    }
-
-    /* HEADER */
-
-    header {
-        background: linear-gradient(135deg, #0f766e, #2563eb);
-        color: white;
-        padding: 28px 20px;
-        text-align: center;
-        border-radius: 0 0 28px 28px;
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
-    }
-
-    .logo {
-        width: 64px;
-        height: 64px;
-        margin: 0 auto 12px;
-        background: rgba(255, 255, 255, 0.18);
-        border-radius: 20px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 32px;
-    }
-
-    header h1 {
-        font-size: 30px;
-        margin-bottom: 7px;
-    }
-
-    header p {
-        font-size: 14px;
-        opacity: 0.92;
-    }
-
-    /* MAIN */
-
-    .container {
-        width: 94%;
-        max-width: 1150px;
-        margin: 22px auto;
-    }
-
-    /* STATUS */
-
-    .status-grid {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 12px;
-        margin-bottom: 22px;
-    }
-
-    .status-card {
-        background: white;
-        padding: 16px 10px;
-        border-radius: 16px;
-        text-align: center;
-        box-shadow: 0 4px 14px rgba(15, 23, 42, 0.07);
-        border: 1px solid #e5e7eb;
-    }
-
-    .status-icon {
-        font-size: 23px;
-        margin-bottom: 6px;
-    }
-
-    .status-card h3 {
-        font-size: 13px;
-        margin-bottom: 5px;
-    }
-
-    .online {
-        color: #16a34a;
-        font-weight: bold;
-        font-size: 12px;
-    }
-
-    .ready {
-        color: #2563eb;
-        font-weight: bold;
-        font-size: 12px;
-    }
-
-    /* GRID */
-
-    .main-grid {
-        display: grid;
-        grid-template-columns: 1.15fr 0.85fr;
-        gap: 20px;
-    }
-
-    .card {
-        background: white;
-        padding: 23px;
-        border-radius: 20px;
-        box-shadow: 0 4px 18px rgba(15, 23, 42, 0.07);
-        border: 1px solid #e5e7eb;
-        margin-bottom: 20px;
-    }
-
-    .card-title {
-        display: flex;
-        align-items: center;
-        gap: 9px;
-        margin-bottom: 20px;
-    }
-
-    .card-title h2 {
-        color: #1e3a8a;
-        font-size: 20px;
-    }
-
-    /* FORM */
-
-    .form-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 15px;
-    }
-
-    .form-group {
-        display: flex;
-        flex-direction: column;
-    }
-
-    .form-group label {
-        margin-bottom: 7px;
-        font-weight: bold;
-        font-size: 13px;
-        color: #475569;
-    }
-
-    input,
-    select {
-        width: 100%;
-        padding: 13px;
-        border: 1px solid #cbd5e1;
-        border-radius: 10px;
-        font-size: 14px;
-        background: #f8fafc;
-        outline: none;
-        transition: 0.2s;
-    }
-
-    input:focus,
-    select:focus {
-        border-color: #2563eb;
-        background: white;
-        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.10);
-    }
-
-    /* BUTTON */
-
-    .predict-btn {
-        width: 100%;
-        margin-top: 20px;
-        padding: 15px;
-        border: none;
-        border-radius: 12px;
-        background: linear-gradient(135deg, #2563eb, #1d4ed8);
-        color: white;
-        font-size: 16px;
-        font-weight: bold;
-        cursor: pointer;
-        box-shadow: 0 6px 14px rgba(37, 99, 235, 0.25);
-        transition: 0.2s;
-    }
-
-    .predict-btn:hover {
-        transform: translateY(-1px);
-    }
-
-    .predict-btn:active {
-        transform: scale(0.98);
-    }
-
-    /* RESULT */
-
-    .result {
-        text-align: center;
-        padding: 28px 18px;
-        border-radius: 18px;
-        background: linear-gradient(180deg, #f8fafc, #eef2ff);
-    }
-
-    .result-label {
-        color: #64748b;
-        font-size: 14px;
-        font-weight: bold;
-    }
-
-    .risk-number {
-        font-size: 58px;
-        font-weight: bold;
-        color: #1e3a8a;
-        margin: 15px 0;
-    }
-
-    .risk-badge {
-        display: inline-block;
-        padding: 10px 28px;
-        border-radius: 30px;
-        font-size: 17px;
-        font-weight: bold;
-        background: #e2e8f0;
-        color: #475569;
-    }
-
-    .low {
-        background: #dcfce7;
-        color: #166534;
-    }
-
-    .medium {
-        background: #fef3c7;
-        color: #92400e;
-    }
-
-    .high {
-        background: #fee2e2;
-        color: #991b1b;
-    }
-
-    .alert-box {
-        margin-top: 18px;
-        padding: 14px;
-        border-radius: 12px;
-        font-weight: bold;
-        font-size: 14px;
-        display: none;
-    }
-
-    /* ERROR */
-
-    .error {
-        background: #fee2e2;
-        color: #991b1b;
-        padding: 13px;
-        border-radius: 10px;
-        margin-top: 15px;
-        display: none;
-        font-size: 14px;
-        font-weight: bold;
-    }
-
-    /* HISTORY */
-
-    .history-card {
-        overflow-x: auto;
-    }
-
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 10px;
-    }
-
-    th,
-    td {
-        padding: 13px 10px;
-        border-bottom: 1px solid #e2e8f0;
-        text-align: center;
-        font-size: 13px;
-    }
-
-    th {
-        background: #eff6ff;
-        color: #1e3a8a;
-    }
-
-    .clear-btn {
-        background: #dc2626;
-        color: white;
-        border: none;
-        width: 100%;
-        padding: 13px;
-        border-radius: 10px;
-        margin-top: 15px;
-        font-weight: bold;
-        cursor: pointer;
-    }
-
-    /* SYSTEM INFO */
-
-    .system-info p {
-        margin: 12px 0;
-        padding: 11px;
-        background: #f8fafc;
-        border-radius: 9px;
-        font-size: 14px;
-    }
-
-    /* FOOTER */
-
-    footer {
-        text-align: center;
-        padding: 25px 15px;
-        color: #64748b;
-        font-size: 12px;
-    }
-
-    .prototype-note {
-        margin-top: 10px;
-        color: #94a3b8;
-    }
-
-    /* MOBILE */
-
-    @media (max-width: 850px) {
-
-        .status-grid {
-            grid-template-columns: 1fr 1fr;
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
-        .main-grid {
-            grid-template-columns: 1fr;
-        }
-    }
-
-    @media (max-width: 520px) {
-
-        header {
-            padding: 23px 15px;
-            border-radius: 0 0 22px 22px;
-        }
-
-        header h1 {
-            font-size: 25px;
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            color: #1f2937;
+            padding: 20px;
         }
 
         .container {
-            width: 94%;
-            margin-top: 15px;
+            max-width: 1000px;
+            margin: auto;
         }
 
-        .status-grid {
-            gap: 9px;
+        .header {
+            background: #111827;
+            color: white;
+            padding: 28px;
+            border-radius: 15px;
+            margin-bottom: 22px;
         }
 
-        .status-card {
-            padding: 13px 5px;
-            border-radius: 13px;
+        .header h1 {
+            margin-bottom: 10px;
+            font-size: 30px;
         }
 
-        .status-card h3 {
-            font-size: 11px;
+        .header p {
+            color: #d1d5db;
+            line-height: 1.6;
+        }
+
+        .badge {
+            display: inline-block;
+            margin-top: 14px;
+            padding: 7px 12px;
+            background: #1f3b64;
+            border-radius: 20px;
+            font-size: 12px;
         }
 
         .card {
-            padding: 17px;
-            border-radius: 17px;
+            background: white;
+            padding: 24px;
+            border-radius: 15px;
+            margin-bottom: 22px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.07);
         }
 
-        .card-title h2 {
-            font-size: 18px;
+        .card h2 {
+            margin-bottom: 8px;
+            font-size: 22px;
         }
 
-        .form-grid {
-            grid-template-columns: 1fr;
-            gap: 12px;
+        .section-description {
+            color: #6b7280;
+            margin-bottom: 22px;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-weight: bold;
+            margin-bottom: 8px;
+            font-size: 14px;
         }
 
         input,
         select {
-            padding: 14px;
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 15px;
+            background: white;
+            color: #1f2937;
         }
 
-        .risk-number {
-            font-size: 52px;
+        input:focus,
+        select:focus {
+            outline: 2px solid #93c5fd;
+            border-color: #2563eb;
         }
 
-        table {
-            min-width: 550px;
+        .help-text {
+            margin-top: 6px;
+            color: #6b7280;
+            font-size: 12px;
+            line-height: 1.5;
         }
-    }
-</style>
-```
 
+        button {
+            width: 100%;
+            margin-top: 24px;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            background: #2563eb;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .result {
+            text-align: center;
+            padding: 30px 20px;
+            border-radius: 12px;
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+        }
+
+        .result-label {
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        .risk-percentage {
+            font-size: 46px;
+            font-weight: bold;
+            margin: 14px 0;
+            overflow-wrap: anywhere;
+        }
+
+        .risk-level {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 12px;
+        }
+
+        .low {
+            color: #047857;
+        }
+
+        .high {
+            color: #b91c1c;
+        }
+
+        .neutral {
+            color: #374151;
+        }
+
+        .status {
+            margin-top: 18px;
+            padding: 12px;
+            border-radius: 8px;
+            background: #ecfdf5;
+            color: #047857;
+            line-height: 1.6;
+            overflow-wrap: anywhere;
+        }
+
+        .status.error {
+            background: #fef2f2;
+            color: #b91c1c;
+        }
+
+        .note {
+            margin-top: 18px;
+            color: #6b7280;
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        .footer {
+            text-align: center;
+            color: #6b7280;
+            font-size: 13px;
+            line-height: 1.8;
+            margin: 24px 0 10px;
+        }
+
+        @media (max-width: 650px) {
+            body {
+                padding: 10px;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header,
+            .card {
+                padding: 18px;
+            }
+
+            .header h1 {
+                font-size: 25px;
+            }
+
+            .risk-percentage {
+                font-size: 38px;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-<header>
-
-```
-<div class="logo">
-    🏥
-</div>
-
-<h1>CarePredict AI</h1>
-
-<p>Hospital Readmission Risk Prediction System</p>
-```
-
-</header>
-
 <div class="container">
 
-```
-<!-- SYSTEM STATUS -->
+    <!-- HEADER -->
 
-<div class="status-grid">
+    <header class="header">
+        <h1>🏥 CarePredict AI</h1>
 
-    <div class="status-card">
-        <div class="status-icon">🧠</div>
-        <h3>AI Model</h3>
-        <p class="online">● ONLINE</p>
-    </div>
+        <p>Hospital Readmission Risk Prediction</p>
 
-    <div class="status-card">
-        <div class="status-icon">🌐</div>
-        <h3>Backend</h3>
-        <p class="online">● CONNECTED</p>
-    </div>
+        <p>
+            An educational AI prototype that analyzes hospital
+            information to demonstrate readmission prediction.
+        </p>
 
-    <div class="status-card">
-        <div class="status-icon">📡</div>
-        <h3>IoT System</h3>
-        <p class="ready">● READY</p>
-    </div>
-
-    <div class="status-card">
-        <div class="status-icon">🚨</div>
-        <h3>Alerts</h3>
-        <p class="ready">● READY</p>
-    </div>
-
-</div>
-
-
-<!-- MAIN -->
-
-<div class="main-grid">
+        <span class="badge">AI + Healthcare Predictive Analytics</span>
+    </header>
 
 
     <!-- PATIENT INFORMATION -->
 
-    <div class="card">
+    <section class="card">
 
-        <div class="card-title">
-            <span>👨‍⚕️</span>
-            <h2>Patient Information</h2>
-        </div>
+        <h2>Patient Information</h2>
+
+        <p class="section-description">
+            Enter the hospital information and select the available
+            test-result categories.
+        </p>
+
+        <form id="patientForm">
+
+            <div class="grid">
+
+                <!-- AGE -->
+
+                <div class="input-group">
+                    <label for="age">Age Group</label>
+
+                    <select id="age" required>
+                        <option value="[0-10)">&lt;10</option>
+                        <option value="[10-20)">10–20</option>
+                        <option value="[20-30)">20–30</option>
+                        <option value="[30-40)">30–40</option>
+                        <option value="[40-50)">40–50</option>
+                        <option value="[50-60)" selected>50–60</option>
+                        <option value="[60-70)">60–70</option>
+                        <option value="[70-80)">70–80</option>
+                        <option value="[80-90)">80–90</option>
+                        <option value="[90-100)">90–100</option>
+                    </select>
+                </div>
 
 
-        <div class="form-grid">
+                <!-- TIME IN HOSPITAL -->
+
+                <div class="input-group">
+                    <label for="time_in_hospital">
+                        Time in Hospital (days)
+                    </label>
+
+                    <input
+                        type="number"
+                        id="time_in_hospital"
+                        min="1"
+                        max="14"
+                        value="5"
+                        required
+                    >
+                </div>
 
 
-            <div class="form-group">
+                <!-- LAB PROCEDURES -->
 
-                <label>Patient ID</label>
+                <div class="input-group">
+                    <label for="num_lab_procedures">
+                        Number of Lab Procedures
+                    </label>
 
-                <input
-                    type="text"
-                    id="patientId"
-                    value="P001"
-                >
+                    <input
+                        type="number"
+                        id="num_lab_procedures"
+                        min="0"
+                        value="45"
+                        required
+                    >
+                </div>
+
+
+                <!-- MEDICAL PROCEDURES -->
+
+                <div class="input-group">
+                    <label for="num_procedures">
+                        Number of Medical Procedures
+                    </label>
+
+                    <input
+                        type="number"
+                        id="num_procedures"
+                        min="0"
+                        value="1"
+                        required
+                    >
+                </div>
+
+
+                <!-- MEDICATIONS -->
+
+                <div class="input-group">
+                    <label for="num_medications">
+                        Number of Medications
+                    </label>
+
+                    <input
+                        type="number"
+                        id="num_medications"
+                        min="0"
+                        value="12"
+                        required
+                    >
+                </div>
+
+
+                <!-- OUTPATIENT VISITS -->
+
+                <div class="input-group">
+                    <label for="number_outpatient">
+                        Previous Outpatient Visits
+                    </label>
+
+                    <input
+                        type="number"
+                        id="number_outpatient"
+                        min="0"
+                        value="1"
+                        required
+                    >
+                </div>
+
+
+                <!-- EMERGENCY VISITS -->
+
+                <div class="input-group">
+                    <label for="number_emergency">
+                        Previous Emergency Visits
+                    </label>
+
+                    <input
+                        type="number"
+                        id="number_emergency"
+                        min="0"
+                        value="0"
+                        required
+                    >
+                </div>
+
+
+                <!-- INPATIENT VISITS -->
+
+                <div class="input-group">
+                    <label for="number_inpatient">
+                        Previous Inpatient Visits
+                    </label>
+
+                    <input
+                        type="number"
+                        id="number_inpatient"
+                        min="0"
+                        value="1"
+                        required
+                    >
+                </div>
+
+
+                <!-- DIAGNOSES -->
+
+                <div class="input-group">
+                    <label for="number_diagnoses">
+                        Number of Diagnoses
+                    </label>
+
+                    <input
+                        type="number"
+                        id="number_diagnoses"
+                        min="1"
+                        max="16"
+                        value="6"
+                        required
+                    >
+                </div>
+
+
+                <!-- HbA1c -->
+
+                <div class="input-group">
+                    <label for="A1Cresult">HbA1c Result</label>
+
+                    <select id="A1Cresult" required>
+                        <option value="Norm">Normal</option>
+                        <option value=">7">Greater than 7</option>
+                        <option value=">8">Greater than 8</option>
+                        <option value="None" selected>Not recorded</option>
+                    </select>
+                </div>
+
+
+                <!-- DIABETES MEDICATION -->
+
+                <div class="input-group">
+                    <label for="diabetesMed">
+                        Diabetes Medication
+                    </label>
+
+                    <select id="diabetesMed" required>
+                        <option value="Yes" selected>Yes</option>
+                        <option value="No">No</option>
+                    </select>
+                </div>
+
+
+                <!-- SERUM GLUCOSE CATEGORY -->
+
+                <div class="input-group">
+                    <label for="max_glu_serum">
+                        Serum Glucose Test Category
+                    </label>
+
+                    <select id="max_glu_serum" required>
+                        <option value="None" selected>
+                            Not recorded
+                        </option>
+
+                        <option value="Norm">
+                            Normal
+                        </option>
+
+                        <option value=">200">
+                            Greater than 200
+                        </option>
+
+                        <option value=">300">
+                            Greater than 300
+                        </option>
+                    </select>
+
+                    <span class="help-text">
+                        Select the category recorded in the dataset.
+                        These categories are not exact glucometer readings.
+                    </span>
+                </div>
+
+
+                <!-- NUMERICAL BLOOD SUGAR -->
+
+                <div class="input-group">
+                    <label for="bloodSugar">
+                        Blood Sugar Reading (mg/dL)
+                    </label>
+
+                    <input
+                        type="number"
+                        id="bloodSugar"
+                        min="1"
+                        max="1500"
+                        step="1"
+                        placeholder="Enter reading"
+                        required
+                    >
+
+                    <span class="help-text">
+                        Recorded separately for demonstration. This
+                        numerical value is not used by the current model.
+                    </span>
+                </div>
 
             </div>
 
 
-            <div class="form-group">
+            <!-- SUBMIT -->
 
-                <label>Age</label>
+            <button type="submit" id="predictButton">
+                🔍 Predict Readmission Risk
+            </button>
 
-                <input
-                    type="number"
-                    id="age"
-                    value="45"
-                    min="1"
-                    max="120"
-                >
+        </form>
 
-            </div>
+    </section>
 
 
-            <div class="form-group">
+    <!-- PREDICTION RESULT -->
 
-                <label>Previous Admissions</label>
+    <section class="card">
 
-                <input
-                    type="number"
-                    id="previousAdmissions"
-                    value="0"
-                    min="0"
-                >
+        <h2>AI Prediction Result</h2>
 
-            </div>
-
-
-            <div class="form-group">
-
-                <label>Previous Stay (Days)</label>
-
-                <input
-                    type="number"
-                    id="previousStay"
-                    value="3"
-                    min="1"
-                >
-
-            </div>
-
-
-            <div class="form-group">
-
-                <label>Heart Rate (BPM)</label>
-
-                <input
-                    type="number"
-                    id="heartRate"
-                    value="76"
-                >
-
-            </div>
-
-
-            <div class="form-group">
-
-                <label>SpO₂ (%)</label>
-
-                <input
-                    type="number"
-                    id="spo2"
-                    value="98"
-                    min="50"
-                    max="100"
-                >
-
-            </div>
-
-
-            <div class="form-group">
-
-                <label>Temperature (°C)</label>
-
-                <input
-                    type="number"
-                    step="0.1"
-                    id="temperature"
-                    value="36.6"
-                >
-
-            </div>
-
-
-            <div class="form-group">
-
-                <label>Systolic BP</label>
-
-                <input
-                    type="number"
-                    id="systolicBP"
-                    value="120"
-                >
-
-            </div>
-
-
-            <div class="form-group">
-
-                <label>Diabetes</label>
-
-                <select id="diabetes">
-
-                    <option value="0">No</option>
-                    <option value="1">Yes</option>
-
-                </select>
-
-            </div>
-
-
-            <div class="form-group">
-
-                <label>Hypertension</label>
-
-                <select id="hypertension">
-
-                    <option value="0">No</option>
-                    <option value="1">Yes</option>
-
-                </select>
-
-            </div>
-
-        </div>
-
-
-        <button
-            class="predict-btn"
-            onclick="predictRisk()"
-        >
-            🔍 Predict Readmission Risk
-        </button>
-
-
-        <div
-            id="errorBox"
-            class="error"
-        ></div>
-
-    </div>
-
-
-    <!-- AI RESULT -->
-
-    <div class="card">
-
-        <div class="card-title">
-            <span>🤖</span>
-            <h2>AI Risk Assessment</h2>
-        </div>
-
+        <p class="section-description">
+            Results returned by the trained CarePredict AI model.
+        </p>
 
         <div class="result">
 
-            <p class="result-label">
-                Predicted Readmission Risk
-            </p>
-
+            <div class="result-label">
+                Experimental Model Score
+            </div>
 
             <div
                 id="riskPercentage"
-                class="risk-number"
+                class="risk-percentage neutral"
             >
                 --
             </div>
 
-
             <div
-                id="riskBadge"
-                class="risk-badge"
+                id="riskLevel"
+                class="risk-level neutral"
             >
                 Waiting for prediction
             </div>
 
-
             <div
-                id="alertBox"
-                class="alert-box"
-            ></div>
+                id="status"
+                class="status"
+                role="status"
+                aria-live="polite"
+            >
+                System ready. Enter the patient information above.
+            </div>
 
         </div>
 
-    </div>
+        <p class="note">
+            The model uses hospital information, HbA1c results,
+            diabetes medication status, and the dataset's categorical
+            serum glucose feature. The numerical blood sugar reading
+            in mg/dL is not used by the current model.
+            <br><br>
+            The displayed percentage is an experimental model score,
+            not a clinically validated probability for an individual
+            patient. Do not use it to make medical decisions.
+        </p>
+
+    </section>
+
+
+    <!-- FOOTER -->
+
+    <footer class="footer">
+        <strong>CarePredict AI</strong><br>
+
+        Educational and hackathon prototype.<br>
+
+        Not a medical diagnostic system or a clinically validated
+        decision-support tool.
+    </footer>
 
 </div>
 
-
-<!-- HISTORY -->
-
-<div class="card history-card">
-
-    <div class="card-title">
-        <span>📊</span>
-        <h2>Patient Risk History</h2>
-    </div>
-
-
-    <table>
-
-        <thead>
-
-            <tr>
-                <th>Patient ID</th>
-                <th>Risk %</th>
-                <th>Risk Level</th>
-                <th>Status</th>
-            </tr>
-
-        </thead>
-
-
-        <tbody id="historyTable"></tbody>
-
-    </table>
-
-
-    <button
-        class="clear-btn"
-        onclick="clearHistory()"
-    >
-        🗑️ Clear History
-    </button>
-
-</div>
-
-
-<!-- SYSTEM INFORMATION -->
-
-<div class="card system-info">
-
-    <div class="card-title">
-        <span>⚙️</span>
-        <h2>System Information</h2>
-    </div>
-
-
-    <p>
-        🧠 <strong>AI Model:</strong>
-        Logistic Regression
-    </p>
-
-
-    <p>
-        🐍 <strong>Backend:</strong>
-        Python + Flask
-    </p>
-
-
-    <p>
-        📡 <strong>IoT:</strong>
-        ESP32 + Sensors
-    </p>
-
-
-    <p>
-        📊 <strong>Prediction:</strong>
-        Hospital Readmission Risk
-    </p>
-
-
-    <p>
-        💡 <strong>Data:</strong>
-        Synthetic demonstration data
-    </p>
-
-</div>
-```
-
-</div>
-
-<footer>
-
-```
-<strong>CarePredict AI</strong>
-— Healthcare AI Hackathon Prototype
-
-<div class="prototype-note">
-    Prototype for demonstration purposes. Not a clinical diagnostic system.
-</div>
-```
-
-</footer>
 
 <script>
+"use strict";
+
+/*
+ * Local backend address.
+ *
+ * This works when Flask is running on the same computer.
+ * A deployed dashboard requires the URL of its deployed backend.
+ */
+const BACKEND_URL = "http://127.0.0.1:5000";
 
 
-/* =========================
-   AI PREDICTION
-========================= */
+const form = document.getElementById("patientForm");
 
-async function predictRisk() {
+const predictButton = document.getElementById("predictButton");
 
-    const errorBox =
-        document.getElementById("errorBox");
+const riskPercentage = document.getElementById("riskPercentage");
 
-    errorBox.style.display = "none";
+const riskLevel = document.getElementById("riskLevel");
+
+const statusBox = document.getElementById("status");
 
 
-    const patient = {
+function showStatus(message, isError = false) {
 
-        Age:
-            Number(
-                document.getElementById("age").value
-            ),
+    statusBox.textContent = message;
 
-        Previous_Admissions:
-            Number(
-                document.getElementById(
-                    "previousAdmissions"
-                ).value
-            ),
+    statusBox.classList.toggle("error", isError);
+}
 
-        Previous_Stay_Days:
-            Number(
-                document.getElementById(
-                    "previousStay"
-                ).value
-            ),
 
-        Heart_Rate:
-            Number(
-                document.getElementById(
-                    "heartRate"
-                ).value
-            ),
+function setResultLoading() {
 
-        SpO2:
-            Number(
-                document.getElementById(
-                    "spo2"
-                ).value
-            ),
+    riskPercentage.textContent = "...";
 
-        Temperature:
-            Number(
-                document.getElementById(
-                    "temperature"
-                ).value
-            ),
+    riskPercentage.className = "risk-percentage neutral";
 
-        Systolic_BP:
-            Number(
-                document.getElementById(
-                    "systolicBP"
-                ).value
-            ),
+    riskLevel.textContent = "Analyzing...";
 
-        Diabetes:
-            Number(
-                document.getElementById(
-                    "diabetes"
-                ).value
-            ),
+    riskLevel.className = "risk-level neutral";
+}
 
-        Hypertension:
-            Number(
-                document.getElementById(
-                    "hypertension"
-                ).value
+
+function resetResult() {
+
+    riskPercentage.textContent = "--";
+
+    riskPercentage.className = "risk-percentage neutral";
+
+    riskLevel.textContent = "Prediction unavailable";
+
+    riskLevel.className = "risk-level neutral";
+}
+
+
+form.addEventListener("submit", async function (event) {
+
+    event.preventDefault();
+
+    if (!form.reportValidity()) {
+        return;
+    }
+
+    const bloodSugarInput = document.getElementById("bloodSugar");
+
+    const bloodSugar = Number(bloodSugarInput.value);
+
+    if (
+        bloodSugarInput.value.trim() === "" ||
+        !Number.isFinite(bloodSugar) ||
+        bloodSugar <= 0 ||
+        bloodSugar > 1500
+    ) {
+        showStatus(
+            "Enter a valid blood sugar reading in mg/dL.",
+            true
+        );
+
+        bloodSugarInput.focus();
+
+        return;
+    }
+
+
+    const numericIds = [
+        "time_in_hospital",
+        "num_lab_procedures",
+        "num_procedures",
+        "num_medications",
+        "number_outpatient",
+        "number_emergency",
+        "number_inpatient",
+        "number_diagnoses"
+    ];
+
+
+    for (const id of numericIds) {
+
+        const element = document.getElementById(id);
+
+        const value = Number(element.value);
+
+        if (
+            element.value.trim() === "" ||
+            !Number.isFinite(value) ||
+            value < Number(element.min || 0) ||
+            (
+                element.max !== "" &&
+                value > Number(element.max)
             )
+        ) {
+
+            showStatus(
+                "Please check the patient information fields.",
+                true
+            );
+
+            element.focus();
+
+            return;
+        }
+    }
+
+
+    /*
+     * The bloodSugar value is deliberately not included.
+     *
+     * The model was trained using the categorical feature
+     * max_glu_serum, not an exact numerical glucose measurement.
+     */
+
+    const patientData = {
+
+        age: document.getElementById("age").value,
+
+        time_in_hospital: Number(
+            document.getElementById("time_in_hospital").value
+        ),
+
+        num_lab_procedures: Number(
+            document.getElementById("num_lab_procedures").value
+        ),
+
+        num_procedures: Number(
+            document.getElementById("num_procedures").value
+        ),
+
+        num_medications: Number(
+            document.getElementById("num_medications").value
+        ),
+
+        number_outpatient: Number(
+            document.getElementById("number_outpatient").value
+        ),
+
+        number_emergency: Number(
+            document.getElementById("number_emergency").value
+        ),
+
+        number_inpatient: Number(
+            document.getElementById("number_inpatient").value
+        ),
+
+        number_diagnoses: Number(
+            document.getElementById("number_diagnoses").value
+        ),
+
+        A1Cresult: document.getElementById("A1Cresult").value,
+
+        diabetesMed: document.getElementById("diabetesMed").value,
+
+        max_glu_serum: document.getElementById("max_glu_serum").value
     };
+
+
+    setResultLoading();
+
+    showStatus("Connecting to the CarePredict AI backend...");
+
+    predictButton.disabled = true;
 
 
     try {
 
-        const response =
-            await fetch(
-                "/predict",
-                {
-                    method: "POST",
+        const response = await fetch(
+            BACKEND_URL + "/predict",
+            {
+                method: "POST",
 
-                    headers: {
-                        "Content-Type":
-                            "application/json"
-                    },
+                headers: {
+                    "Content-Type": "application/json"
+                },
 
-                    body:
-                        JSON.stringify(patient)
-                }
+                body: JSON.stringify(patientData)
+            }
+        );
+
+
+        let result;
+
+        try {
+
+            result = await response.json();
+
+        } catch {
+
+            throw new Error(
+                "The backend returned an invalid response."
             );
+        }
 
 
         if (!response.ok) {
 
             throw new Error(
-                "Backend prediction failed"
+                result.error || "The prediction request failed."
             );
-
         }
-
-
-        const result =
-            await response.json();
-
-
-        /* RISK PERCENTAGE */
-
-        document.getElementById(
-            "riskPercentage"
-        ).innerText =
-            result.risk_percentage + "%";
-
-
-        /* RISK BADGE */
-
-        const badge =
-            document.getElementById(
-                "riskBadge"
-            );
-
-
-        badge.innerText =
-            result.risk_level;
-
-
-        badge.className =
-            "risk-badge";
-
-
-        /* ALERT */
-
-        const alertBox =
-            document.getElementById(
-                "alertBox"
-            );
-
-
-        alertBox.style.display =
-            "block";
 
 
         if (
-            result.risk_level ===
-            "LOW"
+            result.status !== "success" ||
+            typeof result.risk_percentage !== "number" ||
+            typeof result.risk_level !== "string"
         ) {
 
-            badge.classList.add("low");
-
-            alertBox.className =
-                "alert-box low";
-
-            alertBox.innerText =
-                "🟢 Low Risk — Routine monitoring";
-
-        }
-
-
-        else if (
-            result.risk_level ===
-            "MEDIUM"
-        ) {
-
-            badge.classList.add(
-                "medium"
+            throw new Error(
+                "The backend response is missing prediction details."
             );
-
-            alertBox.className =
-                "alert-box medium";
-
-            alertBox.innerText =
-                "🟡 Medium Risk — Increased monitoring";
-
         }
 
 
-        else {
+        riskPercentage.textContent =
+            result.risk_percentage + "%";
 
-            badge.classList.add(
-                "high"
-            );
 
-            alertBox.className =
-                "alert-box high";
+        if (result.risk_level === "ELEVATED") {
 
-            alertBox.innerText =
-                "🔴 High Risk — Immediate attention recommended";
+            riskLevel.textContent = "ELEVATED";
 
+            riskLevel.className = "risk-level high";
+
+        } else if (result.risk_level === "LOWER") {
+
+            riskLevel.textContent = "LOWER";
+
+            riskLevel.className = "risk-level low";
+
+        } else {
+
+            riskLevel.textContent = result.risk_level;
+
+            riskLevel.className = "risk-level neutral";
         }
 
 
-        /* HISTORY */
-
-        addHistory(
-            document.getElementById(
-                "patientId"
-            ).value,
-
-            result.risk_percentage,
-
-            result.risk_level
-        );
-
-    }
-
-
-    catch (error) {
-
-        errorBox.style.display =
-            "block";
-
-        errorBox.innerText =
-            "❌ Cannot connect to CarePredict AI backend.";
-
-        console.error(error);
-
-    }
-
-}
-
-
-/* =========================
-   HISTORY
-========================= */
-
-function addHistory(
-    patientId,
-    risk,
-    level
-) {
-
-    const table =
-        document.getElementById(
-            "historyTable"
+        showStatus(
+            "Prediction completed. The numerical blood sugar " +
+            "reading was not used by the current model."
         );
 
 
-    const row =
-        document.createElement("tr");
+    } catch (error) {
 
+        console.error("CarePredict AI error:", error);
 
-    let status =
-        "Routine";
+        resetResult();
 
+        if (error instanceof TypeError) {
 
-    if (
-        level === "MEDIUM"
-    ) {
+            showStatus(
+                "Cannot connect to the backend. Ensure Flask is " +
+                "running at " + BACKEND_URL +
+                " and check the browser console.",
+                true
+            );
 
-        status =
-            "Monitor";
+        } else {
 
-    }
-
-
-    if (
-        level === "HIGH"
-    ) {
-
-        status =
-            "Attention Required";
-
-    }
-
-
-    row.innerHTML = `
-
-        <td>${patientId}</td>
-
-        <td>${risk}%</td>
-
-        <td>
-            <strong>${level}</strong>
-        </td>
-
-        <td>${status}</td>
-
-    `;
-
-
-    table.prepend(row);
-
-}
-
-
-/* =========================
-   CLEAR HISTORY
-========================= */
-
-function clearHistory() {
-
-    document.getElementById(
-        "historyTable"
-    ).innerHTML = "";
-
-}
-
-
-/* =========================
-   SERVICE WORKER
-========================= */
-
-if (
-    "serviceWorker"
-    in navigator
-) {
-
-    window.addEventListener(
-        "load",
-        () => {
-
-            navigator.serviceWorker
-                .register(
-                    "/service-worker.js"
-                )
-                .then(() => {
-
-                    console.log(
-                        "CarePredict Service Worker registered"
-                    );
-
-                })
-                .catch(error => {
-
-                    console.error(
-                        "Service Worker registration failed:",
-                        error
-                    );
-
-                });
-
+            showStatus(error.message, true);
         }
-    );
 
-}
+    } finally {
 
+        predictButton.disabled = false;
+    }
+
+});
 </script>
 
 </body>
 </html>
+```

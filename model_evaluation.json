@@ -1,0 +1,38 @@
+{
+    "best_model": "HistGradientBoosting",
+    "threshold": 0.13,
+    "features": [
+        "time_in_hospital",
+        "num_lab_procedures",
+        "num_procedures",
+        "num_medications",
+        "number_outpatient",
+        "number_emergency",
+        "number_inpatient",
+        "number_diagnoses",
+        "age",
+        "A1Cresult",
+        "diabetesMed",
+        "max_glu_serum"
+    ],
+    "test_metrics": {
+        "accuracy": 0.7436609934004863,
+        "precision": 0.17348927875243664,
+        "recall": 0.3723849372384937,
+        "f1_score": 0.23670212765957446,
+        "average_precision": 0.18075042024464383,
+        "roc_auc": 0.6318856766315184,
+        "confusion_matrix": [
+            [
+                14186,
+                3816
+            ],
+            [
+                1350,
+                801
+            ]
+        ]
+    },
+    "glucose_feature": "Categorical max_glu_serum; not exact mg/dL.",
+    "clinical_warning": "Educational prototype only. Not clinically validated and not for real medical decisions."
+}
