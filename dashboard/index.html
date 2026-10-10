@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#0b1220">
-
     <title>CarePredict AI | Readmission Risk Prediction</title>
 
     <style>
@@ -22,9 +21,7 @@
             --red: #fb7185;
         }
 
-        * {
-            box-sizing: border-box;
-        }
+        * { box-sizing: border-box; }
 
         body {
             margin: 0;
@@ -40,9 +37,7 @@
             background: #0e1829;
         }
 
-        .header-inner,
-        main,
-        footer {
+        .header-inner, main, footer {
             width: min(1100px, 92%);
             margin: auto;
         }
@@ -53,14 +48,8 @@
             letter-spacing: 0.3px;
         }
 
-        .brand span {
-            color: var(--accent);
-        }
-
-        .subtitle {
-            color: var(--muted);
-            margin-top: 4px;
-        }
+        .brand span { color: var(--accent); }
+        .subtitle, .card-description, .glucose-note { color: var(--muted); }
 
         .status-line {
             margin-top: 12px;
@@ -76,15 +65,11 @@
             height: 9px;
             border-radius: 50%;
             background: var(--yellow);
+            flex-shrink: 0;
         }
 
-        main {
-            padding: 28px 0 40px;
-        }
-
-        .hero {
-            margin-bottom: 24px;
-        }
+        main { padding: 28px 0 40px; }
+        .hero { margin-bottom: 24px; }
 
         .hero h1 {
             font-size: clamp(1.7rem, 4vw, 2.5rem);
@@ -121,14 +106,10 @@
             min-width: 0;
         }
 
-        .card h2 {
-            margin: 0 0 5px;
-            font-size: 1.25rem;
-        }
+        .card h2 { margin: 0 0 5px; font-size: 1.25rem; }
 
         .card-description {
             margin: 0 0 20px;
-            color: var(--muted);
             font-size: 0.9rem;
         }
 
@@ -138,13 +119,8 @@
             gap: 15px;
         }
 
-        .field {
-            min-width: 0;
-        }
-
-        .field.full {
-            grid-column: 1 / -1;
-        }
+        .field { min-width: 0; }
+        .field.full { grid-column: 1 / -1; }
 
         label {
             display: block;
@@ -153,8 +129,7 @@
             color: #d8e5f7;
         }
 
-        input,
-        select {
+        input, select {
             width: 100%;
             min-height: 44px;
             border: 1px solid var(--border);
@@ -165,8 +140,7 @@
             font-size: 0.95rem;
         }
 
-        input:focus,
-        select:focus {
+        input:focus, select:focus {
             outline: 2px solid var(--accent);
             outline-offset: 1px;
         }
@@ -186,10 +160,7 @@
             cursor: pointer;
         }
 
-        button:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
+        button:disabled { opacity: 0.6; cursor: not-allowed; }
 
         .primary-button {
             width: 100%;
@@ -211,12 +182,11 @@
             color: var(--muted);
         }
 
-        .result-placeholder .icon {
-            font-size: 2.8rem;
-        }
+        .result-placeholder .icon { font-size: 2.8rem; }
 
         .result-content[hidden],
-        .result-placeholder[hidden] {
+        .result-placeholder[hidden],
+        #errorMessage[hidden] {
             display: none;
         }
 
@@ -228,10 +198,7 @@
             margin: 18px 0;
         }
 
-        .risk-label {
-            color: var(--muted);
-            font-size: 0.88rem;
-        }
+        .risk-label { color: var(--muted); font-size: 0.88rem; }
 
         .risk-value {
             font-size: 2rem;
@@ -240,17 +207,9 @@
             overflow-wrap: anywhere;
         }
 
-        .risk-value.low {
-            color: var(--green);
-        }
-
-        .risk-value.medium {
-            color: var(--yellow);
-        }
-
-        .risk-value.high {
-            color: var(--red);
-        }
+        .risk-value.low { color: var(--green); }
+        .risk-value.medium { color: var(--yellow); }
+        .risk-value.high { color: var(--red); }
 
         .progress-track {
             height: 10px;
@@ -281,10 +240,7 @@
             overflow-wrap: anywhere;
         }
 
-        .metric-title {
-            font-size: 0.8rem;
-            color: var(--muted);
-        }
+        .metric-title { font-size: 0.8rem; color: var(--muted); }
 
         .metric-value {
             font-size: 1.05rem;
@@ -312,15 +268,8 @@
             color: #ffd5dc;
         }
 
-        .message.success {
-            background: #102e27;
-            border: 1px solid #24654f;
-            color: #c4f8e2;
-        }
-
         .glucose-note {
             margin-top: 14px;
-            color: var(--muted);
             font-size: 0.85rem;
         }
 
@@ -331,9 +280,7 @@
             font-size: 0.9rem;
         }
 
-        .feature-list li {
-            margin: 5px 0;
-        }
+        .feature-list li { margin: 5px 0; }
 
         footer {
             padding: 22px 0 30px;
@@ -344,21 +291,9 @@
         }
 
         @media (max-width: 760px) {
-            .grid {
-                grid-template-columns: 1fr;
-            }
-
-            .form-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .field.full {
-                grid-column: auto;
-            }
-
-            .card {
-                padding: 17px;
-            }
+            .grid, .form-grid { grid-template-columns: 1fr; }
+            .field.full { grid-column: auto; }
+            .card { padding: 17px; }
         }
     </style>
 </head>
@@ -400,7 +335,6 @@
 
             <form id="predictionForm">
                 <div class="form-grid">
-
                     <div class="field">
                         <label for="time_in_hospital">Days in hospital</label>
                         <input id="time_in_hospital" type="number" min="1" max="14" value="3" required>
@@ -487,13 +421,8 @@
 
                     <div class="field full">
                         <label for="glucoseReading">Optional glucometer reading (mg/dL)</label>
-                        <input
-                            id="glucoseReading"
-                            type="number"
-                            min="0"
-                            max="1000"
-                            placeholder="Optional — e.g. 120"
-                        >
+                        <input id="glucoseReading" type="number" min="0" max="1000"
+                               placeholder="Optional — e.g. 120">
                         <div class="field-help">
                             Informational only. This exact numeric reading is not used by the model.
                             Select the dataset category above separately.
@@ -506,16 +435,12 @@
                 </button>
             </form>
 
-            <button class="secondary-button" id="resetButton" type="button">
-                Reset Form
-            </button>
+            <button class="secondary-button" id="resetButton" type="button">Reset Form</button>
         </section>
 
         <section class="card">
             <h2>Prediction Result</h2>
-            <p class="card-description">
-                The result shown here comes from the deployed prediction API.
-            </p>
+            <p class="card-description">The result shown here comes from the deployed prediction API.</p>
 
             <div class="result-placeholder" id="resultPlaceholder">
                 <div class="icon">📊</div>
@@ -527,10 +452,7 @@
                     <div class="risk-label">Model output category</div>
                     <div class="risk-value" id="riskLevel">—</div>
 
-                    <div class="risk-label">
-                        Model score: <strong id="riskPercentage">—</strong>
-                    </div>
-
+                    <div class="risk-label">Model score: <strong id="riskPercentage">—</strong></div>
                     <div class="progress-track">
                         <div class="progress-bar" id="riskBar"></div>
                     </div>
@@ -571,9 +493,7 @@
 
     <section class="card" style="margin-top:22px">
         <h2>Model Information</h2>
-        <p class="card-description">
-            The backend expects these 12 features:
-        </p>
+        <p class="card-description">The backend expects these 12 features:</p>
         <ul class="feature-list">
             <li>Hospital stay, lab procedures, procedures and medications</li>
             <li>Outpatient, emergency and inpatient visit counts</li>
@@ -587,105 +507,103 @@
     </section>
 </main>
 
-<footer>
-    CarePredict AI · Educational prototype · Not for clinical use
-</footer>
+<footer>CarePredict AI · Educational prototype · Not for clinical use</footer>
 
 <script>
-    // Deployed backend URLs.
-    // Do not append another "/predict" to PREDICT_URL.
-    const API_BASE_URL = "https://carepredict-ai-8fic.onrender.com";
-    const PREDICT_URL = `${API_BASE_URL}/predict`;
-    const HEALTH_URL = `${API_BASE_URL}/health`;
+"use strict";
 
-    const form = document.getElementById("predictionForm");
-    const predictButton = document.getElementById("predictButton");
-    const resetButton = document.getElementById("resetButton");
+// Deployed backend URLs.
+const API_BASE_URL = "https://carepredict-ai-8fic.onrender.com";
+const PREDICT_URL = `${API_BASE_URL}/predict`;
+const HEALTH_URL = `${API_BASE_URL}/health`;
 
-    const backendStatus = document.getElementById("backendStatus");
-    const statusDot = document.getElementById("statusDot");
+const form = document.getElementById("predictionForm");
+const predictButton = document.getElementById("predictButton");
+const resetButton = document.getElementById("resetButton");
+const backendStatus = document.getElementById("backendStatus");
+const statusDot = document.getElementById("statusDot");
+const resultPlaceholder = document.getElementById("resultPlaceholder");
+const resultContent = document.getElementById("resultContent");
+const errorMessage = document.getElementById("errorMessage");
 
-    const resultPlaceholder = document.getElementById("resultPlaceholder");
-    const resultContent = document.getElementById("resultContent");
-    const errorMessage = document.getElementById("errorMessage");
+function setBackendStatus(online, message) {
+    backendStatus.textContent = message;
+    statusDot.style.background = online ? "#34d399" : "#fb7185";
+}
 
-    function setBackendStatus(online, message) {
-        backendStatus.textContent = message;
-        statusDot.style.background = online ? "#34d399" : "#fb7185";
-    }
+async function checkBackendHealth() {
+    setBackendStatus(false, "Checking backend connection...");
 
-    async function checkBackendHealth() {
-        try {
-            const response = await fetch(HEALTH_URL);
-            if (!response.ok) {
-                throw new Error(`Health check returned HTTP ${response.status}`);
-            }
+    try {
+        const response = await fetch(HEALTH_URL);
 
-            const data = await response.json();
-
-            const online = data.status === "online" && data.model_loaded === true;
-
-            setBackendStatus(
-                online,
-                online
-                    ? `Backend online · Model: ${data.model_name || "Loaded"}`
-                    : "Backend responded, but model status needs checking"
-            );
-
-            console.log("CarePredict backend health:", data);
-            return data;
-        } catch (error) {
-            setBackendStatus(false, "Backend unavailable — try again shortly");
-            console.error("CarePredict health check failed:", error);
-            return null;
-        }
-    }
-
-    function getNumber(id) {
-        const element = document.getElementById(id);
-        const value = Number(element.value);
-
-        if (element.value.trim() === "" || !Number.isFinite(value)) {
-            throw new Error(`Please enter a valid value for ${element.labels[0].textContent}.`);
+        if (!response.ok) {
+            throw new Error(`Health check returned HTTP ${response.status}`);
         }
 
-        return value;
+        const data = await response.json();
+        const online = data.status === "online" && data.model_loaded === true;
+
+        setBackendStatus(
+            online,
+            online
+                ? `Backend online · Model: ${data.model_name || "Loaded"}`
+                : "Backend responded, but model status needs checking"
+        );
+
+        console.log("CarePredict backend health:", data);
+        return data;
+    } catch (error) {
+        setBackendStatus(false, "Backend unavailable — try again shortly");
+        console.error("CarePredict health check failed:", error);
+        return null;
+    }
+}
+
+function getNumber(id) {
+    const element = document.getElementById(id);
+    const value = Number(element.value);
+
+    if (element.value.trim() === "" || !Number.isFinite(value)) {
+        throw new Error(`Please enter a valid value for ${element.labels[0].textContent}.`);
     }
 
-    function getPayload() {
-        // Use only the 12 features expected by the trained model.
-        // The optional exact glucose reading is intentionally excluded.
-        return {
-            time_in_hospital: getNumber("time_in_hospital"),
-            num_lab_procedures: getNumber("num_lab_procedures"),
-            num_procedures: getNumber("num_procedures"),
-            num_medications: getNumber("num_medications"),
-            number_outpatient: getNumber("number_outpatient"),
-            number_emergency: getNumber("number_emergency"),
-            number_inpatient: getNumber("number_inpatient"),
-            number_diagnoses: getNumber("number_diagnoses"),
-            age: document.getElementById("age").value,
-            A1Cresult: document.getElementById("A1Cresult").value,
-            diabetesMed: document.getElementById("diabetesMed").value,
-            max_glu_serum: document.getElementById("max_glu_serum").value
-        };
-    }
+    return value;
+}
 
-    function formatThreshold(value) {
-        if (typeof value !== "number" || !Number.isFinite(value)) {
-            return "Not provided";
-        }
-        return value.toFixed(2);
-    }
+function getPayload() {
+    // The optional exact glucose reading is intentionally excluded.
+    return {
+        time_in_hospital: getNumber("time_in_hospital"),
+        num_lab_procedures: getNumber("num_lab_procedures"),
+        num_procedures: getNumber("num_procedures"),
+        num_medications: getNumber("num_medications"),
+        number_outpatient: getNumber("number_outpatient"),
+        number_emergency: getNumber("number_emergency"),
+        number_inpatient: getNumber("number_inpatient"),
+        number_diagnoses: getNumber("number_diagnoses"),
+        age: document.getElementById("age").value,
+        A1Cresult: document.getElementById("A1Cresult").value,
+        diabetesMed: document.getElementById("diabetesMed").value,
+        max_glu_serum: document.getElementById("max_glu_serum").value
+    };
+}
 
-    function formatScore(value) {
-        if (typeof value !== "number" || !Number.isFinite(value)) {
-            return "Not provided";
-        }
-        return `${value.toFixed(2)}%`;
+function formatThreshold(value) {
+    if (typeof value !== "number" || !Number.isFinite(value)) {
+        return "Not provided";
     }
+    return value.toFixed(2);
+}
 
-    ```javascript
+function formatScore(value) {
+    if (typeof value !== "number" || !Number.isFinite(value)) {
+        return "Not provided";
+    }
+    return `${value.toFixed(2)}%`;
+}
+
+// Only one definition of this function is needed.
 function normalizeRiskLevel(value) {
     const level = String(value || "UNKNOWN").toUpperCase();
 
@@ -703,152 +621,125 @@ function normalizeRiskLevel(value) {
 
     return { label: level, cssClass: "" };
 }
-```
- {
-        const level = String(value || "UNKNOWN").toUpperCase();
 
-        if (level === "LOW" || level === "LOWER") {
-            return { label: level, cssClass: "low" };
-        }
+function displayPrediction(data) {
+    resultPlaceholder.hidden = true;
+    resultContent.hidden = false;
+    errorMessage.hidden = true;
 
-        if (level === "MEDIUM" || level === "MODERATE") {
-            return { label: level, cssClass: "medium" };
-        }
+    const risk = normalizeRiskLevel(data.risk_level);
+    const riskLevelElement = document.getElementById("riskLevel");
 
-        if (level === "HIGH" || level === "HIGHER") {
-            return { label: level, cssClass: "high" };
-        }
+    riskLevelElement.textContent = risk.label;
+    riskLevelElement.className = `risk-value ${risk.cssClass}`;
 
-        return { label: level, cssClass: "" };
+    const score = data.risk_percentage;
+    document.getElementById("riskPercentage").textContent = formatScore(score);
+
+    const riskBar = document.getElementById("riskBar");
+
+    if (typeof score === "number" && Number.isFinite(score)) {
+        riskBar.style.width = `${Math.max(0, Math.min(100, score))}%`;
+    } else {
+        riskBar.style.width = "0%";
     }
 
-    function displayPrediction(data) {
-        resultPlaceholder.hidden = true;
-        resultContent.hidden = false;
-        errorMessage.hidden = true;
+    const threshold =
+        typeof data.decision_threshold === "number"
+            ? data.decision_threshold
+            : (typeof data.threshold === "number" ? data.threshold : null);
 
-        const risk = normalizeRiskLevel(data.risk_level);
-        const riskLevelElement = document.getElementById("riskLevel");
+    document.getElementById("decisionThreshold").textContent =
+        formatThreshold(threshold);
 
-        riskLevelElement.textContent = risk.label;
-        riskLevelElement.className = `risk-value ${risk.cssClass}`;
+    document.getElementById("predictedClass").textContent =
+        typeof data.predicted_readmission === "boolean"
+            ? (data.predicted_readmission ? "Positive class" : "Negative class")
+            : "Not provided";
 
-        const score = data.risk_percentage;
-        document.getElementById("riskPercentage").textContent = formatScore(score);
+    document.getElementById("modelName").textContent =
+        data.model_name || "HistGradientBoosting";
 
-        const riskBar = document.getElementById("riskBar");
-        if (typeof score === "number" && Number.isFinite(score)) {
-            riskBar.style.width = `${Math.max(0, Math.min(100, score))}%`;
-        } else {
-            riskBar.style.width = "0%";
-        }
+    document.getElementById("predictionStatus").textContent =
+        data.status === "success" ? "Success" : (data.status || "Received");
 
-        // IMPORTANT: backend returns "decision_threshold", not "threshold".
-        const threshold =
-            typeof data.decision_threshold === "number"
-                ? data.decision_threshold
-                : (typeof data.threshold === "number" ? data.threshold : null);
+    document.getElementById("modelMessage").textContent =
+        data.message ||
+        "Educational model output only. Not validated for clinical decisions.";
 
-        document.getElementById("decisionThreshold").textContent =
-            formatThreshold(threshold);
+    document.getElementById("glucoseNote").textContent =
+        data.glucose_note ||
+        "The exact numeric glucometer reading is not used by the model.";
 
-        if (typeof data.predicted_readmission === "boolean") {
-            document.getElementById("predictedClass").textContent =
-                data.predicted_readmission
-                    ? "Positive class"
-                    : "Negative class";
-        } else {
-            document.getElementById("predictedClass").textContent = "Not provided";
-        }
+    console.log("CarePredict prediction response:", data);
+}
 
-        document.getElementById("modelName").textContent =
-            data.model_name || "HistGradientBoosting";
+function showError(message) {
+    errorMessage.textContent = message;
+    errorMessage.hidden = false;
+}
 
-        document.getElementById("predictionStatus").textContent =
-            data.status === "success" ? "Success" : (data.status || "Received");
+form.addEventListener("submit", async function (event) {
+    event.preventDefault();
 
-        document.getElementById("modelMessage").textContent =
-            data.message ||
-            "Educational model output only. Not validated for clinical decisions.";
+    errorMessage.hidden = true;
+    predictButton.disabled = true;
+    predictButton.textContent = "Predicting...";
 
-        document.getElementById("glucoseNote").textContent =
-            data.glucose_note ||
-            "The model uses a categorical serum-glucose feature. The exact numeric glucometer reading is not used by the model.";
+    try {
+        const payload = getPayload();
 
-        console.log("CarePredict prediction response:", data);
-    }
+        console.log("CarePredict API request:", PREDICT_URL);
+        console.log("CarePredict request payload:", payload);
 
-    function showError(message) {
-        errorMessage.textContent = message;
-        errorMessage.hidden = false;
-    }
+        const response = await fetch(PREDICT_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+        });
 
-    form.addEventListener("submit", async function (event) {
-        event.preventDefault();
+        const data = await response.json().catch(() => ({}));
 
-        errorMessage.hidden = true;
-        predictButton.disabled = true;
-        predictButton.textContent = "Predicting...";
-
-        try {
-            const payload = getPayload();
-
-            console.log("CarePredict API request:", PREDICT_URL);
-            console.log("CarePredict request payload:", payload);
-
-            const response = await fetch(PREDICT_URL, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(payload)
-            });
-
-            const data = await response.json().catch(() => ({}));
-
-            if (!response.ok) {
-                throw new Error(
-                    data.error ||
-                    data.message ||
-                    `Prediction request failed with HTTP ${response.status}.`
-                );
-            }
-
-            if (data.status && data.status !== "success") {
-                throw new Error(data.message || "The backend did not return a successful prediction.");
-            }
-
-            if (
-                typeof data.risk_level !== "string" ||
-                typeof data.risk_percentage !== "number"
-            ) {
-                console.error("Unexpected prediction response:", data);
-                throw new Error("The backend response is missing the expected risk_level or risk_percentage field.");
-            }
-
-            displayPrediction(data);
-            setBackendStatus(true, "Backend online · Prediction received");
-        } catch (error) {
-            console.error("CarePredict prediction failed:", error);
-            showError(
-                `${error.message} Please check your internet connection and try again.`
+        if (!response.ok) {
+            throw new Error(
+                data.error || data.message ||
+                `Prediction request failed with HTTP ${response.status}.`
             );
-        } finally {
-            predictButton.disabled = false;
-            predictButton.textContent = "Predict Readmission Risk";
         }
-    });
 
-    resetButton.addEventListener("click", function () {
-        form.reset();
-        resultContent.hidden = true;
-        resultPlaceholder.hidden = false;
-        errorMessage.hidden = true;
-        document.getElementById("riskBar").style.width = "0%";
-    });
+        if (data.status && data.status !== "success") {
+            throw new Error(data.message || "The backend did not return a successful prediction.");
+        }
 
-    // Check the backend when the page loads.
-    checkBackendHealth();
+        if (
+            typeof data.risk_level !== "string" ||
+            typeof data.risk_percentage !== "number"
+        ) {
+            console.error("Unexpected prediction response:", data);
+            throw new Error("The backend response is missing risk_level or risk_percentage.");
+        }
+
+        displayPrediction(data);
+        setBackendStatus(true, "Backend online · Prediction received");
+    } catch (error) {
+        console.error("CarePredict prediction failed:", error);
+        showError(`${error.message} Please check your internet connection and try again.`);
+    } finally {
+        predictButton.disabled = false;
+        predictButton.textContent = "Predict Readmission Risk";
+    }
+});
+
+resetButton.addEventListener("click", function () {
+    form.reset();
+    resultContent.hidden = true;
+    resultPlaceholder.hidden = false;
+    errorMessage.hidden = true;
+    document.getElementById("riskBar").style.width = "0%";
+});
+
+// Check the backend when the page loads.
+checkBackendHealth();
 </script>
 </body>
 </html>
