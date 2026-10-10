@@ -1,746 +1,588 @@
-```html
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#0b1220">
-    <title>CarePredict AI | Readmission Risk Prediction</title>
-
+    <title>CarePredict AI | Readmission Risk Dashboard</title>
     <style>
         :root {
-            --bg: #0b1220;
-            --panel: #121d30;
-            --panel-light: #192840;
-            --border: #2a3b54;
-            --text: #edf4ff;
-            --muted: #a8b8cf;
-            --accent: #48c6ef;
-            --green: #34d399;
-            --yellow: #fbbf24;
-            --red: #fb7185;
+            --bg: #f4f7fb;
+            --card: #ffffff;
+            --text: #172033;
+            --muted: #667085;
+            --primary: #2563eb;
+            --border: #dfe6ef;
+            --green: #15803d;
+            --orange: #c2410c;
+            --red: #b91c1c;
         }
 
-        * { box-sizing: border-box; }
+```
+    * { box-sizing: border-box; }
 
-        body {
-            margin: 0;
-            font-family: Arial, Helvetica, sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            line-height: 1.6;
-        }
+    body {
+        margin: 0;
+        font-family: Arial, Helvetica, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+    }
 
-        header {
-            padding: 22px 18px;
-            border-bottom: 1px solid var(--border);
-            background: #0e1829;
-        }
+    header {
+        background: #10264d;
+        color: white;
+        padding: 24px 18px;
+    }
 
-        .header-inner, main, footer {
-            width: min(1100px, 92%);
-            margin: auto;
-        }
+    .header-inner, main {
+        max-width: 1050px;
+        margin: auto;
+    }
 
-        .brand {
-            font-size: 1.7rem;
-            font-weight: 800;
-            letter-spacing: 0.3px;
-        }
+    header h1 {
+        margin: 0 0 8px;
+        font-size: 28px;
+    }
 
-        .brand span { color: var(--accent); }
-        .subtitle, .card-description, .glucose-note { color: var(--muted); }
+    header p {
+        margin: 0;
+        color: #d6e3ff;
+        line-height: 1.5;
+    }
 
-        .status-line {
-            margin-top: 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.9rem;
-            color: var(--muted);
-        }
+    main { padding: 24px 16px 40px; }
 
-        .status-dot {
-            width: 9px;
-            height: 9px;
-            border-radius: 50%;
-            background: var(--yellow);
-            flex-shrink: 0;
-        }
+    .notice {
+        padding: 13px 15px;
+        border-radius: 10px;
+        background: #fff7e6;
+        border: 1px solid #f5d48b;
+        color: #784b00;
+        line-height: 1.5;
+        margin-bottom: 18px;
+        font-size: 14px;
+    }
 
-        main { padding: 28px 0 40px; }
-        .hero { margin-bottom: 24px; }
+    .grid {
+        display: grid;
+        grid-template-columns: 1.15fr 0.85fr;
+        gap: 20px;
+        align-items: start;
+    }
 
-        .hero h1 {
-            font-size: clamp(1.7rem, 4vw, 2.5rem);
-            margin: 0 0 8px;
-        }
+    .card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 15px;
+        padding: 22px;
+        box-shadow: 0 5px 20px rgba(16, 38, 77, 0.05);
+    }
 
-        .hero p {
-            margin: 0;
-            color: var(--muted);
-            max-width: 750px;
-        }
+    h2 {
+        margin: 0 0 8px;
+        font-size: 20px;
+    }
 
-        .notice {
-            border: 1px solid #765c24;
-            background: #332815;
-            color: #ffe8a3;
-            padding: 14px 16px;
-            border-radius: 12px;
-            margin: 20px 0;
-            font-size: 0.92rem;
-        }
+    .subtext {
+        margin: 0 0 20px;
+        color: var(--muted);
+        line-height: 1.5;
+        font-size: 14px;
+    }
 
-        .grid {
-            display: grid;
-            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-            gap: 22px;
-        }
+    .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+    }
 
-        .card {
-            border: 1px solid var(--border);
-            background: var(--panel);
-            border-radius: 18px;
-            padding: 22px;
-            min-width: 0;
-        }
+    .field {
+        display: flex;
+        flex-direction: column;
+        gap: 7px;
+    }
 
-        .card h2 { margin: 0 0 5px; font-size: 1.25rem; }
+    .field.full { grid-column: 1 / -1; }
 
-        .card-description {
-            margin: 0 0 20px;
-            font-size: 0.9rem;
-        }
+    label {
+        font-weight: 600;
+        font-size: 13px;
+    }
 
-        .form-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-        }
+    input, select {
+        width: 100%;
+        padding: 11px 12px;
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        background: white;
+        color: var(--text);
+        font-size: 14px;
+    }
 
-        .field { min-width: 0; }
-        .field.full { grid-column: 1 / -1; }
+    input:focus, select:focus {
+        outline: 2px solid #bfdbfe;
+        border-color: var(--primary);
+    }
 
-        label {
-            display: block;
-            margin-bottom: 6px;
-            font-size: 0.88rem;
-            color: #d8e5f7;
-        }
+    .field-help {
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.4;
+    }
 
-        input, select {
-            width: 100%;
-            min-height: 44px;
-            border: 1px solid var(--border);
-            background: #0b1525;
-            color: var(--text);
-            padding: 10px 12px;
-            border-radius: 9px;
-            font-size: 0.95rem;
-        }
+    button {
+        width: 100%;
+        margin-top: 20px;
+        border: 0;
+        border-radius: 9px;
+        padding: 13px 16px;
+        background: var(--primary);
+        color: white;
+        font-size: 15px;
+        font-weight: 700;
+        cursor: pointer;
+    }
 
-        input:focus, select:focus {
-            outline: 2px solid var(--accent);
-            outline-offset: 1px;
-        }
+    button:hover { background: #1d4ed8; }
+    button:disabled { opacity: 0.6; cursor: wait; }
 
-        .field-help {
-            font-size: 0.78rem;
-            color: var(--muted);
-            margin-top: 5px;
-        }
+    .result-box {
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 18px;
+        background: #f8fafc;
+        margin-top: 18px;
+    }
 
-        button {
-            border: none;
-            border-radius: 10px;
-            padding: 13px 18px;
-            font-weight: 700;
-            font-size: 0.95rem;
-            cursor: pointer;
-        }
+    .result-label {
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--muted);
+        font-weight: 700;
+    }
 
-        button:disabled { opacity: 0.6; cursor: not-allowed; }
+    .risk-level {
+        margin: 9px 0;
+        font-size: 28px;
+        font-weight: 800;
+        overflow-wrap: anywhere;
+    }
 
-        .primary-button {
-            width: 100%;
-            margin-top: 20px;
-            background: var(--accent);
-            color: #071523;
-        }
+    .risk-low { color: var(--green); }
+    .risk-medium { color: var(--orange); }
+    .risk-high { color: var(--red); }
 
-        .secondary-button {
-            background: var(--panel-light);
-            color: var(--text);
-            border: 1px solid var(--border);
-            margin-top: 10px;
-        }
+    .percentage {
+        font-size: 35px;
+        font-weight: 800;
+        margin: 10px 0;
+    }
 
-        .result-placeholder {
-            padding: 25px 10px;
-            text-align: center;
-            color: var(--muted);
-        }
+    .progress {
+        height: 10px;
+        background: #e2e8f0;
+        border-radius: 20px;
+        overflow: hidden;
+        margin: 12px 0;
+    }
 
-        .result-placeholder .icon { font-size: 2.8rem; }
+    .progress-fill {
+        width: 0;
+        height: 100%;
+        background: var(--primary);
+        transition: width 0.3s ease;
+    }
 
-        .result-content[hidden],
-        .result-placeholder[hidden],
-        #errorMessage[hidden] {
-            display: none;
-        }
+    .status {
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.5;
+        overflow-wrap: anywhere;
+    }
 
-        .risk-box {
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            background: #0c1728;
-            padding: 18px;
-            margin: 18px 0;
-        }
+    .error { color: var(--red); }
 
-        .risk-label { color: var(--muted); font-size: 0.88rem; }
+    .metric-list {
+        list-style: none;
+        margin: 18px 0 0;
+        padding: 0;
+    }
 
-        .risk-value {
-            font-size: 2rem;
-            font-weight: 800;
-            margin: 5px 0;
-            overflow-wrap: anywhere;
-        }
+    .metric-list li {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 11px 0;
+        border-bottom: 1px solid var(--border);
+        font-size: 14px;
+    }
 
-        .risk-value.low { color: var(--green); }
-        .risk-value.medium { color: var(--yellow); }
-        .risk-value.high { color: var(--red); }
+    .metric-list li:last-child { border-bottom: 0; }
 
-        .progress-track {
-            height: 10px;
-            border-radius: 999px;
-            background: #27364b;
-            overflow: hidden;
-            margin-top: 12px;
-        }
+    .metric-list span:first-child { color: var(--muted); }
+    .metric-list span:last-child {
+        font-weight: 700;
+        text-align: right;
+        overflow-wrap: anywhere;
+    }
 
-        .progress-bar {
-            height: 100%;
-            width: 0;
-            background: var(--accent);
-            transition: width 0.3s ease;
-        }
+    footer {
+        text-align: center;
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.6;
+        padding: 0 18px 24px;
+    }
 
-        .metrics {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-top: 18px;
-        }
+    @media (max-width: 760px) {
+        .grid { grid-template-columns: 1fr; }
+        .form-grid { grid-template-columns: 1fr; }
+        .field.full { grid-column: auto; }
+        header h1 { font-size: 23px; }
+    }
+</style>
+```
 
-        .metric {
-            border: 1px solid var(--border);
-            border-radius: 11px;
-            padding: 13px;
-            overflow-wrap: anywhere;
-        }
-
-        .metric-title { font-size: 0.8rem; color: var(--muted); }
-
-        .metric-value {
-            font-size: 1.05rem;
-            font-weight: 700;
-            margin-top: 5px;
-        }
-
-        .message {
-            padding: 12px;
-            border-radius: 10px;
-            margin-top: 15px;
-            font-size: 0.9rem;
-            overflow-wrap: anywhere;
-        }
-
-        .message.info {
-            background: #102d42;
-            border: 1px solid #235875;
-            color: #c4edff;
-        }
-
-        .message.error {
-            background: #3b1720;
-            border: 1px solid #7f2939;
-            color: #ffd5dc;
-        }
-
-        .glucose-note {
-            margin-top: 14px;
-            font-size: 0.85rem;
-        }
-
-        .feature-list {
-            margin: 10px 0 0;
-            padding-left: 20px;
-            color: var(--muted);
-            font-size: 0.9rem;
-        }
-
-        .feature-list li { margin: 5px 0; }
-
-        footer {
-            padding: 22px 0 30px;
-            border-top: 1px solid var(--border);
-            color: var(--muted);
-            font-size: 0.84rem;
-            text-align: center;
-        }
-
-        @media (max-width: 760px) {
-            .grid, .form-grid { grid-template-columns: 1fr; }
-            .field.full { grid-column: auto; }
-            .card { padding: 17px; }
-        }
-    </style>
 </head>
 
 <body>
 <header>
     <div class="header-inner">
-        <div class="brand">CarePredict <span>AI</span></div>
-        <div class="subtitle">Hospital Readmission Risk Prediction — Educational Prototype</div>
-
-        <div class="status-line">
-            <span class="status-dot" id="statusDot"></span>
-            <span id="backendStatus" aria-live="polite">Checking backend connection...</span>
-        </div>
+        <h1>CarePredict AI</h1>
+        <p>Hospital Readmission Risk Prediction Dashboard</p>
     </div>
 </header>
 
 <main>
-    <section class="hero">
-        <h1>Patient Readmission Risk Dashboard</h1>
-        <p>
-            Enter sample patient information to receive an experimental model output.
-            This application is for education and demonstration, not clinical decision-making.
-        </p>
-    </section>
-
     <div class="notice">
-        <strong>Important:</strong> This model is not clinically validated. Its output must
-        not be used to diagnose a patient, decide discharge, or replace professional medical judgment.
-        Use synthetic or properly de-identified data only.
+        <strong>Educational prototype only:</strong>
+        This tool is not clinically validated and must not be used to make
+        real patient-care decisions. Predictions depend on the model and
+        the quality of the supplied data.
     </div>
 
-    <div class="grid">
-        <section class="card">
-            <h2>Patient Information</h2>
-            <p class="card-description">
-                Complete the fields below and select Predict to run the model.
-            </p>
-
-            <form id="predictionForm">
-                <div class="form-grid">
-                    <div class="field">
-                        <label for="time_in_hospital">Days in hospital</label>
-                        <input id="time_in_hospital" type="number" min="1" max="14" value="3" required>
-                    </div>
-
-                    <div class="field">
-                        <label for="num_lab_procedures">Lab procedures</label>
-                        <input id="num_lab_procedures" type="number" min="0" max="150" value="40" required>
-                    </div>
-
-                    <div class="field">
-                        <label for="num_procedures">Other procedures</label>
-                        <input id="num_procedures" type="number" min="0" max="10" value="0" required>
-                    </div>
-
-                    <div class="field">
-                        <label for="num_medications">Number of medications</label>
-                        <input id="num_medications" type="number" min="0" max="100" value="10" required>
-                    </div>
-
-                    <div class="field">
-                        <label for="number_outpatient">Outpatient visits</label>
-                        <input id="number_outpatient" type="number" min="0" max="50" value="0" required>
-                    </div>
-
-                    <div class="field">
-                        <label for="number_emergency">Emergency visits</label>
-                        <input id="number_emergency" type="number" min="0" max="50" value="0" required>
-                    </div>
-
-                    <div class="field">
-                        <label for="number_inpatient">Previous inpatient visits</label>
-                        <input id="number_inpatient" type="number" min="0" max="50" value="0" required>
-                    </div>
-
-                    <div class="field">
-                        <label for="number_diagnoses">Number of diagnoses</label>
-                        <input id="number_diagnoses" type="number" min="1" max="20" value="5" required>
-                    </div>
-
-                    <div class="field">
-                        <label for="age">Age group</label>
-                        <select id="age" required>
-                            <option value="[0-10)">0–10</option>
-                            <option value="[10-20)">10–20</option>
-                            <option value="[20-30)">20–30</option>
-                            <option value="[30-40)">30–40</option>
-                            <option value="[40-50)">40–50</option>
-                            <option value="[50-60)">50–60</option>
-                            <option value="[60-70)" selected>60–70</option>
-                            <option value="[70-80)">70–80</option>
-                            <option value="[80-90)">80–90</option>
-                            <option value="[90-100)">90–100</option>
-                        </select>
-                    </div>
-
-                    <div class="field">
-                        <label for="A1Cresult">A1C result category</label>
-                        <select id="A1Cresult" required>
-                            <option value="None" selected>Not measured / None</option>
-                            <option value="Norm">Normal</option>
-                            <option value=">7">Above 7</option>
-                            <option value=">8">Above 8</option>
-                        </select>
-                    </div>
-
-                    <div class="field">
-                        <label for="diabetesMed">Diabetes medication</label>
-                        <select id="diabetesMed" required>
-                            <option value="Yes" selected>Yes</option>
-                            <option value="No">No</option>
-                        </select>
-                    </div>
-
-                    <div class="field">
-                        <label for="max_glu_serum">Serum glucose category</label>
-                        <select id="max_glu_serum" required>
-                            <option value="None" selected>Not measured / None</option>
-                            <option value="Norm">Normal</option>
-                            <option value=">200">Above 200 category</option>
-                            <option value=">300">Above 300 category</option>
-                        </select>
-                    </div>
-
-                    <div class="field full">
-                        <label for="glucoseReading">Optional glucometer reading (mg/dL)</label>
-                        <input id="glucoseReading" type="number" min="0" max="1000"
-                               placeholder="Optional — e.g. 120">
-                        <div class="field-help">
-                            Informational only. This exact numeric reading is not used by the model.
-                            Select the dataset category above separately.
-                        </div>
-                    </div>
-                </div>
-
-                <button class="primary-button" id="predictButton" type="submit">
-                    Predict Readmission Risk
-                </button>
-            </form>
-
-            <button class="secondary-button" id="resetButton" type="button">Reset Form</button>
-        </section>
-
-        <section class="card">
-            <h2>Prediction Result</h2>
-            <p class="card-description">The result shown here comes from the deployed prediction API.</p>
-
-            <div class="result-placeholder" id="resultPlaceholder">
-                <div class="icon">📊</div>
-                <p>Complete the form and click <strong>Predict Readmission Risk</strong>.</p>
-            </div>
-
-            <div class="result-content" id="resultContent" hidden>
-                <div class="risk-box">
-                    <div class="risk-label">Model output category</div>
-                    <div class="risk-value" id="riskLevel">—</div>
-
-                    <div class="risk-label">Model score: <strong id="riskPercentage">—</strong></div>
-                    <div class="progress-track">
-                        <div class="progress-bar" id="riskBar"></div>
-                    </div>
-                </div>
-
-                <div class="metrics">
-                    <div class="metric">
-                        <div class="metric-title">Decision threshold</div>
-                        <div class="metric-value" id="decisionThreshold">—</div>
-                    </div>
-
-                    <div class="metric">
-                        <div class="metric-title">Predicted class</div>
-                        <div class="metric-value" id="predictedClass">—</div>
-                    </div>
-
-                    <div class="metric">
-                        <div class="metric-title">Model</div>
-                        <div class="metric-value" id="modelName">HistGradientBoosting</div>
-                    </div>
-
-                    <div class="metric">
-                        <div class="metric-title">API status</div>
-                        <div class="metric-value" id="predictionStatus">—</div>
-                    </div>
-                </div>
-
-                <div class="message info" id="modelMessage">
-                    Educational model output only.
-                </div>
-
-                <div class="glucose-note" id="glucoseNote"></div>
-            </div>
-
-            <div id="errorMessage" class="message error" role="alert" hidden></div>
-        </section>
-    </div>
-
-    <section class="card" style="margin-top:22px">
-        <h2>Model Information</h2>
-        <p class="card-description">The backend expects these 12 features:</p>
-        <ul class="feature-list">
-            <li>Hospital stay, lab procedures, procedures and medications</li>
-            <li>Outpatient, emergency and inpatient visit counts</li>
-            <li>Number of diagnoses</li>
-            <li>Age group, A1C result, diabetes medication and serum glucose category</li>
-        </ul>
-        <p class="glucose-note">
-            A model score is not necessarily a clinically calibrated probability.
-            The decision threshold is the value used by the backend to assign its predicted class.
+```
+<div class="grid">
+    <section class="card">
+        <h2>Patient Information</h2>
+        <p class="subtext">
+            Enter the available patient information and select
+            <strong>Predict Risk</strong>.
         </p>
+
+        <form id="predictionForm">
+            <div class="form-grid">
+                <div class="field">
+                    <label for="time_in_hospital">Time in Hospital (days)</label>
+                    <input id="time_in_hospital" type="number"
+                           min="1" max="100" value="3" required>
+                </div>
+
+                <div class="field">
+                    <label for="num_lab_procedures">Number of Lab Procedures</label>
+                    <input id="num_lab_procedures" type="number"
+                           min="0" max="200" value="40" required>
+                </div>
+
+                <div class="field">
+                    <label for="num_procedures">Number of Procedures</label>
+                    <input id="num_procedures" type="number"
+                           min="0" max="100" value="1" required>
+                </div>
+
+                <div class="field">
+                    <label for="num_medications">Number of Medications</label>
+                    <input id="num_medications" type="number"
+                           min="0" max="200" value="10" required>
+                </div>
+
+                <div class="field">
+                    <label for="number_outpatient">Outpatient Visits</label>
+                    <input id="number_outpatient" type="number"
+                           min="0" max="100" value="0" required>
+                </div>
+
+                <div class="field">
+                    <label for="number_emergency">Emergency Visits</label>
+                    <input id="number_emergency" type="number"
+                           min="0" max="100" value="0" required>
+                </div>
+
+                <div class="field">
+                    <label for="number_inpatient">Previous Inpatient Visits</label>
+                    <input id="number_inpatient" type="number"
+                           min="0" max="100" value="0" required>
+                </div>
+
+                <div class="field">
+                    <label for="number_diagnoses">Number of Diagnoses</label>
+                    <input id="number_diagnoses" type="number"
+                           min="1" max="100" value="5" required>
+                </div>
+
+                <div class="field full">
+                    <label for="age">Age Group</label>
+                    <select id="age" required>
+                        <option value="[0-10)">0–10</option>
+                        <option value="[10-20)">10–20</option>
+                        <option value="[20-30)">20–30</option>
+                        <option value="[30-40)">30–40</option>
+                        <option value="[40-50)">40–50</option>
+                        <option value="[50-60)">50–60</option>
+                        <option value="[60-70)">60–70</option>
+                        <option value="[70-80)" selected>70–80</option>
+                        <option value="[80-90)">80–90</option>
+                        <option value="[90-100)">90–100</option>
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label for="A1Cresult">HbA1c Result</label>
+                    <select id="A1Cresult" required>
+                        <option value="None">Not measured</option>
+                        <option value="Norm">Normal</option>
+                        <option value=">7">Greater than 7</option>
+                        <option value=">8">Greater than 8</option>
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label for="diabetesMed">Diabetes Medication</label>
+                    <select id="diabetesMed" required>
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+                </div>
+
+                <div class="field full">
+                    <label for="max_glu_serum">Serum Glucose Category</label>
+                    <select id="max_glu_serum" required>
+                        <option value="None">Not measured</option>
+                        <option value="Norm">Normal</option>
+                        <option value=">200">Greater than 200</option>
+                        <option value=">300">Greater than 300</option>
+                    </select>
+                    <div class="field-help">
+                        Select the category recorded in the dataset.
+                        This is a category, not a numeric glucometer reading.
+                    </div>
+                </div>
+            </div>
+
+            <button id="predictButton" type="submit">Predict Risk</button>
+        </form>
     </section>
+
+    <section class="card">
+        <h2>Prediction Result</h2>
+        <p class="subtext">
+            The result appears here after the backend responds.
+        </p>
+
+        <div class="result-box" aria-live="polite">
+            <div class="result-label">Estimated Risk Category</div>
+            <div id="riskLevel" class="risk-level">Waiting for input</div>
+
+            <div class="result-label">Model Risk Percentage</div>
+            <div id="riskPercentage" class="percentage">—</div>
+
+            <div class="progress">
+                <div id="progressFill" class="progress-fill"></div>
+            </div>
+
+            <p id="resultStatus" class="status">
+                Enter the details and click Predict Risk.
+            </p>
+        </div>
+
+        <ul class="metric-list">
+            <li>
+                <span>Model Decision</span>
+                <span id="predictedReadmission">—</span>
+            </li>
+            <li>
+                <span>Decision Threshold</span>
+                <span id="decisionThreshold">—</span>
+            </li>
+            <li>
+                <span>Backend Status</span>
+                <span id="backendStatus">Checking…</span>
+            </li>
+        </ul>
+    </section>
+</div>
+```
+
 </main>
 
-<footer>CarePredict AI · Educational prototype · Not for clinical use</footer>
+<footer>
+    CarePredict AI — student project prototype. Not for diagnosis,
+    treatment, discharge, or other clinical decisions.
+</footer>
 
 <script>
-"use strict";
+    const API_URL = "https://carepredict-ai-8fic.onrender.com";
 
-// Deployed backend URLs.
-const API_BASE_URL = "https://carepredict-ai-8fic.onrender.com";
-const PREDICT_URL = `${API_BASE_URL}/predict`;
-const HEALTH_URL = `${API_BASE_URL}/health`;
+    const form = document.getElementById("predictionForm");
+    const predictButton = document.getElementById("predictButton");
 
-const form = document.getElementById("predictionForm");
-const predictButton = document.getElementById("predictButton");
-const resetButton = document.getElementById("resetButton");
-const backendStatus = document.getElementById("backendStatus");
-const statusDot = document.getElementById("statusDot");
-const resultPlaceholder = document.getElementById("resultPlaceholder");
-const resultContent = document.getElementById("resultContent");
-const errorMessage = document.getElementById("errorMessage");
-
-function setBackendStatus(online, message) {
-    backendStatus.textContent = message;
-    statusDot.style.background = online ? "#34d399" : "#fb7185";
-}
-
-async function checkBackendHealth() {
-    setBackendStatus(false, "Checking backend connection...");
-
-    try {
-        const response = await fetch(HEALTH_URL);
-
-        if (!response.ok) {
-            throw new Error(`Health check returned HTTP ${response.status}`);
-        }
-
-        const data = await response.json();
-        const online = data.status === "online" && data.model_loaded === true;
-
-        setBackendStatus(
-            online,
-            online
-                ? `Backend online · Model: ${data.model_name || "Loaded"}`
-                : "Backend responded, but model status needs checking"
-        );
-
-        console.log("CarePredict backend health:", data);
-        return data;
-    } catch (error) {
-        setBackendStatus(false, "Backend unavailable — try again shortly");
-        console.error("CarePredict health check failed:", error);
-        return null;
-    }
-}
-
-function getNumber(id) {
-    const element = document.getElementById(id);
-    const value = Number(element.value);
-
-    if (element.value.trim() === "" || !Number.isFinite(value)) {
-        throw new Error(`Please enter a valid value for ${element.labels[0].textContent}.`);
-    }
-
-    return value;
-}
-
-function getPayload() {
-    // The optional exact glucose reading is intentionally excluded.
-    return {
-        time_in_hospital: getNumber("time_in_hospital"),
-        num_lab_procedures: getNumber("num_lab_procedures"),
-        num_procedures: getNumber("num_procedures"),
-        num_medications: getNumber("num_medications"),
-        number_outpatient: getNumber("number_outpatient"),
-        number_emergency: getNumber("number_emergency"),
-        number_inpatient: getNumber("number_inpatient"),
-        number_diagnoses: getNumber("number_diagnoses"),
-        age: document.getElementById("age").value,
-        A1Cresult: document.getElementById("A1Cresult").value,
-        diabetesMed: document.getElementById("diabetesMed").value,
-        max_glu_serum: document.getElementById("max_glu_serum").value
-    };
-}
-
-function formatThreshold(value) {
-    if (typeof value !== "number" || !Number.isFinite(value)) {
-        return "Not provided";
-    }
-    return value.toFixed(2);
-}
-
-function formatScore(value) {
-    if (typeof value !== "number" || !Number.isFinite(value)) {
-        return "Not provided";
-    }
-    return `${value.toFixed(2)}%`;
-}
-
-// Only one definition of this function is needed.
-function normalizeRiskLevel(value) {
-    const level = String(value || "UNKNOWN").toUpperCase();
-
-    if (["LOW", "LOWER"].includes(level)) {
-        return { label: level, cssClass: "low" };
-    }
-
-    if (["MEDIUM", "MODERATE"].includes(level)) {
-        return { label: level, cssClass: "medium" };
-    }
-
-    if (["HIGH", "HIGHER", "ELEVATED"].includes(level)) {
-        return { label: level, cssClass: "high" };
-    }
-
-    return { label: level, cssClass: "" };
-}
-
-function displayPrediction(data) {
-    resultPlaceholder.hidden = true;
-    resultContent.hidden = false;
-    errorMessage.hidden = true;
-
-    const risk = normalizeRiskLevel(data.risk_level);
     const riskLevelElement = document.getElementById("riskLevel");
+    const riskPercentageElement = document.getElementById("riskPercentage");
+    const progressFill = document.getElementById("progressFill");
+    const resultStatus = document.getElementById("resultStatus");
+    const predictedReadmissionElement = document.getElementById("predictedReadmission");
+    const decisionThresholdElement = document.getElementById("decisionThreshold");
+    const backendStatusElement = document.getElementById("backendStatus");
 
-    riskLevelElement.textContent = risk.label;
-    riskLevelElement.className = `risk-value ${risk.cssClass}`;
+    function normalizeRiskLevel(value) {
+        const risk = String(value || "").toUpperCase();
 
-    const score = data.risk_percentage;
-    document.getElementById("riskPercentage").textContent = formatScore(score);
+        if (risk.includes("HIGH")) return "HIGH";
+        if (risk.includes("MEDIUM") || risk.includes("MODERATE")) return "MEDIUM";
+        if (risk.includes("LOW")) return "LOW";
 
-    const riskBar = document.getElementById("riskBar");
-
-    if (typeof score === "number" && Number.isFinite(score)) {
-        riskBar.style.width = `${Math.max(0, Math.min(100, score))}%`;
-    } else {
-        riskBar.style.width = "0%";
+        return risk || "UNKNOWN";
     }
 
-    const threshold =
-        typeof data.decision_threshold === "number"
-            ? data.decision_threshold
-            : (typeof data.threshold === "number" ? data.threshold : null);
+    function setRiskStyle(level) {
+        riskLevelElement.classList.remove("risk-low", "risk-medium", "risk-high");
 
-    document.getElementById("decisionThreshold").textContent =
-        formatThreshold(threshold);
+        if (level === "LOW" || level === "LOWER") {
+            riskLevelElement.classList.add("risk-low");
+        } else if (level === "MEDIUM" || level === "MODERATE") {
+            riskLevelElement.classList.add("risk-medium");
+        } else if (level === "HIGH" || level === "ELEVATED") {
+            riskLevelElement.classList.add("risk-high");
+        }
+    }
 
-    document.getElementById("predictedClass").textContent =
-        typeof data.predicted_readmission === "boolean"
-            ? (data.predicted_readmission ? "Positive class" : "Negative class")
-            : "Not provided";
+    async function checkBackend() {
+        try {
+            const response = await fetch(`${API_URL}/health`);
+            if (!response.ok) throw new Error("Backend returned an error");
 
-    document.getElementById("modelName").textContent =
-        data.model_name || "HistGradientBoosting";
+            const data = await response.json();
+            backendStatusElement.textContent =
+                data.status === "online" && data.model_loaded
+                    ? "Online — model loaded"
+                    : "Online — check model status";
+        } catch (error) {
+            backendStatusElement.textContent = "Unavailable";
+        }
+    }
 
-    document.getElementById("predictionStatus").textContent =
-        data.status === "success" ? "Success" : (data.status || "Received");
+    function getNumber(id) {
+        return Number(document.getElementById(id).value);
+    }
 
-    document.getElementById("modelMessage").textContent =
-        data.message ||
-        "Educational model output only. Not validated for clinical decisions.";
+    function buildPayload() {
+        return {
+            time_in_hospital: getNumber("time_in_hospital"),
+            num_lab_procedures: getNumber("num_lab_procedures"),
+            num_procedures: getNumber("num_procedures"),
+            num_medications: getNumber("num_medications"),
+            number_outpatient: getNumber("number_outpatient"),
+            number_emergency: getNumber("number_emergency"),
+            number_inpatient: getNumber("number_inpatient"),
+            number_diagnoses: getNumber("number_diagnoses"),
+            age: document.getElementById("age").value,
+            A1Cresult: document.getElementById("A1Cresult").value,
+            diabetesMed: document.getElementById("diabetesMed").value,
+            max_glu_serum: document.getElementById("max_glu_serum").value
+        };
+    }
 
-    document.getElementById("glucoseNote").textContent =
-        data.glucose_note ||
-        "The exact numeric glucometer reading is not used by the model.";
+    function showError(message) {
+        riskLevelElement.textContent = "Prediction unavailable";
+        riskLevelElement.className = "risk-level error";
+        riskPercentageElement.textContent = "—";
+        progressFill.style.width = "0%";
+        predictedReadmissionElement.textContent = "—";
+        decisionThresholdElement.textContent = "—";
+        resultStatus.textContent = message;
+        resultStatus.className = "status error";
+    }
 
-    console.log("CarePredict prediction response:", data);
-}
+    form.addEventListener("submit", async function (event) {
+        event.preventDefault();
 
-function showError(message) {
-    errorMessage.textContent = message;
-    errorMessage.hidden = false;
-}
+        predictButton.disabled = true;
+        predictButton.textContent = "Predicting…";
+        resultStatus.className = "status";
+        resultStatus.textContent = "Sending information to the model…";
 
-form.addEventListener("submit", async function (event) {
-    event.preventDefault();
+        try {
+            const response = await fetch(`${API_URL}/predict`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(buildPayload())
+            });
 
-    errorMessage.hidden = true;
-    predictButton.disabled = true;
-    predictButton.textContent = "Predicting...";
+            const data = await response.json();
 
-    try {
-        const payload = getPayload();
+            if (!response.ok) {
+                throw new Error(data.error || data.message || "Prediction request failed.");
+            }
 
-        console.log("CarePredict API request:", PREDICT_URL);
-        console.log("CarePredict request payload:", payload);
+            const rawRisk = data.risk_level || data.risk || "UNKNOWN";
+            const risk = normalizeRiskLevel(rawRisk);
 
-        const response = await fetch(PREDICT_URL, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payload)
-        });
+            riskLevelElement.textContent = rawRisk;
+            riskLevelElement.className = "risk-level";
+            setRiskStyle(rawRisk.toUpperCase());
 
-        const data = await response.json().catch(() => ({}));
+            const rawPercentage = Number(data.risk_percentage);
+            const percentageIsValid =
+                data.risk_percentage !== undefined &&
+                data.risk_percentage !== null &&
+                Number.isFinite(rawPercentage);
 
-        if (!response.ok) {
-            throw new Error(
-                data.error || data.message ||
-                `Prediction request failed with HTTP ${response.status}.`
+            if (percentageIsValid) {
+                const safePercentage = Math.max(0, Math.min(100, rawPercentage));
+                riskPercentageElement.textContent = `${safePercentage.toFixed(1)}%`;
+                progressFill.style.width = `${safePercentage}%`;
+            } else {
+                riskPercentageElement.textContent = "Not provided";
+                progressFill.style.width = "0%";
+            }
+
+            if (data.predicted_readmission !== undefined) {
+                predictedReadmissionElement.textContent =
+                    String(data.predicted_readmission);
+            } else {
+                predictedReadmissionElement.textContent = "Not provided";
+            }
+
+            if (data.decision_threshold !== undefined &&
+                data.decision_threshold !== null) {
+                decisionThresholdElement.textContent =
+                    String(data.decision_threshold);
+            } else {
+                decisionThresholdElement.textContent = "Not provided";
+            }
+
+            resultStatus.textContent =
+                data.message ||
+                "Prediction returned by the educational model. This result is not a clinical assessment.";
+
+            if (data.glucose_note) {
+                resultStatus.textContent += " " + data.glucose_note;
+            }
+        } catch (error) {
+            showError(
+                `Could not get a prediction: ${error.message}. Check your internet connection and backend status.`
             );
+        } finally {
+            predictButton.disabled = false;
+            predictButton.textContent = "Predict Risk";
         }
+    });
 
-        if (data.status && data.status !== "success") {
-            throw new Error(data.message || "The backend did not return a successful prediction.");
-        }
-
-        if (
-            typeof data.risk_level !== "string" ||
-            typeof data.risk_percentage !== "number"
-        ) {
-            console.error("Unexpected prediction response:", data);
-            throw new Error("The backend response is missing risk_level or risk_percentage.");
-        }
-
-        displayPrediction(data);
-        setBackendStatus(true, "Backend online · Prediction received");
-    } catch (error) {
-        console.error("CarePredict prediction failed:", error);
-        showError(`${error.message} Please check your internet connection and try again.`);
-    } finally {
-        predictButton.disabled = false;
-        predictButton.textContent = "Predict Readmission Risk";
-    }
-});
-
-resetButton.addEventListener("click", function () {
-    form.reset();
-    resultContent.hidden = true;
-    resultPlaceholder.hidden = false;
-    errorMessage.hidden = true;
-    document.getElementById("riskBar").style.width = "0%";
-});
-
-// Check the backend when the page loads.
-checkBackendHealth();
+    checkBackend();
 </script>
+
 </body>
 </html>
-```
