@@ -10,7 +10,7 @@ from flask_cors import CORS
 # ============================================================
 # 1. CREATE FLASK APPLICATION AND CONFIGURE CORS
 # ============================================================
-f
+
 app = Flask(__name__)
 
 DASHBOARD_ORIGIN = (
