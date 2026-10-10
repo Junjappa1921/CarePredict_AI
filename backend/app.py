@@ -10,7 +10,7 @@ from flask_cors import CORS
 # ============================================================
 # 1. CREATE FLASK APPLICATION AND CONFIGURE CORS
 # ============================================================
-
+f
 app = Flask(__name__)
 
 DASHBOARD_ORIGIN = (
@@ -41,7 +41,7 @@ BASE_DIR = os.path.dirname(
 
 MODEL_PATH = os.path.join(
     BASE_DIR,
-    "readmission_model_improved.pkl"
+    "readmission_model.pkl"
 )
 
 model = None
