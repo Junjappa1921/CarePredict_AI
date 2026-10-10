@@ -685,7 +685,26 @@
         return `${value.toFixed(2)}%`;
     }
 
-    function normalizeRiskLevel(value) {
+    ```javascript
+function normalizeRiskLevel(value) {
+    const level = String(value || "UNKNOWN").toUpperCase();
+
+    if (["LOW", "LOWER"].includes(level)) {
+        return { label: level, cssClass: "low" };
+    }
+
+    if (["MEDIUM", "MODERATE"].includes(level)) {
+        return { label: level, cssClass: "medium" };
+    }
+
+    if (["HIGH", "HIGHER", "ELEVATED"].includes(level)) {
+        return { label: level, cssClass: "high" };
+    }
+
+    return { label: level, cssClass: "" };
+}
+```
+ {
         const level = String(value || "UNKNOWN").toUpperCase();
 
         if (level === "LOW" || level === "LOWER") {
