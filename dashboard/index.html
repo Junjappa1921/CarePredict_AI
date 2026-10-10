@@ -2,247 +2,265 @@
 
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CarePredict AI | Readmission Risk Dashboard</title>
-    <style>
-        :root {
-            --bg: #f4f7fb;
-            --card: #ffffff;
-            --text: #172033;
-            --muted: #667085;
-            --primary: #2563eb;
-            --border: #dfe6ef;
-            --green: #15803d;
-            --orange: #c2410c;
-            --red: #b91c1c;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CarePredict AI | Patient Readmission Dashboard</title>
 
-```
-    * { box-sizing: border-box; }
-
-    body {
-        margin: 0;
-        font-family: Arial, Helvetica, sans-serif;
-        background: var(--bg);
-        color: var(--text);
-    }
-
-    header {
-        background: #10264d;
-        color: white;
-        padding: 24px 18px;
-    }
-
-    .header-inner, main {
-        max-width: 1050px;
-        margin: auto;
-    }
-
-    header h1 {
-        margin: 0 0 8px;
-        font-size: 28px;
-    }
-
-    header p {
-        margin: 0;
-        color: #d6e3ff;
-        line-height: 1.5;
-    }
-
-    main { padding: 24px 16px 40px; }
-
-    .notice {
-        padding: 13px 15px;
-        border-radius: 10px;
-        background: #fff7e6;
-        border: 1px solid #f5d48b;
-        color: #784b00;
-        line-height: 1.5;
-        margin-bottom: 18px;
-        font-size: 14px;
-    }
-
-    .grid {
-        display: grid;
-        grid-template-columns: 1.15fr 0.85fr;
-        gap: 20px;
-        align-items: start;
-    }
-
-    .card {
-        background: var(--card);
-        border: 1px solid var(--border);
-        border-radius: 15px;
-        padding: 22px;
-        box-shadow: 0 5px 20px rgba(16, 38, 77, 0.05);
-    }
-
-    h2 {
-        margin: 0 0 8px;
-        font-size: 20px;
-    }
-
-    .subtext {
-        margin: 0 0 20px;
-        color: var(--muted);
-        line-height: 1.5;
-        font-size: 14px;
-    }
-
-    .form-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 16px;
-    }
-
-    .field {
-        display: flex;
-        flex-direction: column;
-        gap: 7px;
-    }
-
-    .field.full { grid-column: 1 / -1; }
-
-    label {
-        font-weight: 600;
-        font-size: 13px;
-    }
-
-    input, select {
-        width: 100%;
-        padding: 11px 12px;
-        border: 1px solid #cbd5e1;
-        border-radius: 8px;
-        background: white;
-        color: var(--text);
-        font-size: 14px;
-    }
-
-    input:focus, select:focus {
-        outline: 2px solid #bfdbfe;
-        border-color: var(--primary);
-    }
-
-    .field-help {
-        color: var(--muted);
-        font-size: 12px;
-        line-height: 1.4;
-    }
-
-    button {
-        width: 100%;
-        margin-top: 20px;
-        border: 0;
-        border-radius: 9px;
-        padding: 13px 16px;
-        background: var(--primary);
-        color: white;
-        font-size: 15px;
-        font-weight: 700;
-        cursor: pointer;
-    }
-
-    button:hover { background: #1d4ed8; }
-    button:disabled { opacity: 0.6; cursor: wait; }
-
-    .result-box {
-        border: 1px solid var(--border);
-        border-radius: 12px;
-        padding: 18px;
-        background: #f8fafc;
-        margin-top: 18px;
-    }
-
-    .result-label {
-        font-size: 12px;
-        text-transform: uppercase;
-        letter-spacing: 0.08em;
-        color: var(--muted);
-        font-weight: 700;
-    }
-
-    .risk-level {
-        margin: 9px 0;
-        font-size: 28px;
-        font-weight: 800;
-        overflow-wrap: anywhere;
-    }
-
-    .risk-low { color: var(--green); }
-    .risk-medium { color: var(--orange); }
-    .risk-high { color: var(--red); }
-
-    .percentage {
-        font-size: 35px;
-        font-weight: 800;
-        margin: 10px 0;
-    }
-
-    .progress {
-        height: 10px;
-        background: #e2e8f0;
-        border-radius: 20px;
-        overflow: hidden;
-        margin: 12px 0;
-    }
-
-    .progress-fill {
-        width: 0;
-        height: 100%;
-        background: var(--primary);
-        transition: width 0.3s ease;
-    }
-
-    .status {
-        color: var(--muted);
-        font-size: 13px;
-        line-height: 1.5;
-        overflow-wrap: anywhere;
-    }
-
-    .error { color: var(--red); }
-
-    .metric-list {
-        list-style: none;
-        margin: 18px 0 0;
-        padding: 0;
-    }
-
-    .metric-list li {
-        display: flex;
-        justify-content: space-between;
-        gap: 12px;
-        padding: 11px 0;
-        border-bottom: 1px solid var(--border);
-        font-size: 14px;
-    }
-
-    .metric-list li:last-child { border-bottom: 0; }
-
-    .metric-list span:first-child { color: var(--muted); }
-    .metric-list span:last-child {
-        font-weight: 700;
-        text-align: right;
-        overflow-wrap: anywhere;
-    }
-
-    footer {
-        text-align: center;
-        color: var(--muted);
-        font-size: 12px;
-        line-height: 1.6;
-        padding: 0 18px 24px;
-    }
-
-    @media (max-width: 760px) {
-        .grid { grid-template-columns: 1fr; }
-        .form-grid { grid-template-columns: 1fr; }
-        .field.full { grid-column: auto; }
-        header h1 { font-size: 23px; }
-    }
+<style>
+:root {
+    --bg:#f1f5f9;
+    --card:#ffffff;
+    --text:#172033;
+    --muted:#64748b;
+    --primary:#2563eb;
+    --border:#dbe3ef;
+    --green:#15803d;
+    --green-bg:#dcfce7;
+    --orange:#b45309;
+    --orange-bg:#fef3c7;
+    --red:#b91c1c;
+    --red-bg:#fee2e2;
+}
+* { box-sizing:border-box; }
+body {
+    margin:0;
+    font-family:Arial,Helvetica,sans-serif;
+    background:var(--bg);
+    color:var(--text);
+}
+header {
+    background:linear-gradient(120deg,#10264d,#1d4ed8);
+    color:white;
+    padding:28px 20px;
+}
+.header-inner,main { max-width:1150px; margin:auto; }
+header h1 { margin:0 0 8px; font-size:30px; }
+header p { margin:0; color:#dbeafe; line-height:1.6; }
+main { padding:25px 16px 40px; }
+.notice {
+    padding:14px 16px;
+    border-radius:10px;
+    background:#fff7e6;
+    border:1px solid #f5d48b;
+    color:#784b00;
+    line-height:1.6;
+    margin-bottom:20px;
+    font-size:13px;
+}
+.grid {
+    display:grid;
+    grid-template-columns:1.1fr .9fr;
+    gap:22px;
+    align-items:start;
+}
+.card {
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:24px;
+    box-shadow:0 6px 24px rgba(16,38,77,.06);
+    min-width:0;
+}
+h2 { margin:0 0 8px; font-size:21px; }
+.subtext {
+    margin:0 0 22px;
+    color:var(--muted);
+    line-height:1.6;
+    font-size:14px;
+}
+.form-grid {
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:17px;
+}
+.field { display:flex; flex-direction:column; gap:8px; }
+.field.full { grid-column:1/-1; }
+label { font-weight:700; font-size:13px; }
+input,select {
+    width:100%;
+    padding:12px;
+    border:1px solid #cbd5e1;
+    border-radius:8px;
+    background:white;
+    color:var(--text);
+    font-size:14px;
+}
+input:focus,select:focus {
+    outline:2px solid #bfdbfe;
+    border-color:var(--primary);
+}
+.field-help { color:var(--muted); font-size:12px; line-height:1.5; }
+button {
+    border:0;
+    border-radius:9px;
+    padding:12px 16px;
+    background:var(--primary);
+    color:white;
+    font-size:14px;
+    font-weight:700;
+    cursor:pointer;
+}
+button:hover { background:#1d4ed8; }
+button:disabled { opacity:.65; cursor:wait; }
+.primary-button { width:100%; margin-top:22px; padding:14px; font-size:15px; }
+.secondary-button { background:#475569; }
+.secondary-button:hover { background:#334155; }
+.danger-button { background:#b91c1c; }
+.danger-button:hover { background:#991b1b; }
+.result-box {
+    border:1px solid var(--border);
+    border-radius:13px;
+    padding:20px;
+    background:#f8fafc;
+    margin-top:18px;
+}
+.result-label {
+    font-size:12px;
+    text-transform:uppercase;
+    letter-spacing:.07em;
+    color:var(--muted);
+    font-weight:700;
+}
+.risk-level {
+    display:inline-block;
+    margin:12px 0 22px;
+    padding:9px 15px;
+    border-radius:8px;
+    font-size:25px;
+    font-weight:800;
+    overflow-wrap:anywhere;
+}
+.risk-low { color:var(--green); background:var(--green-bg); }
+.risk-medium { color:var(--orange); background:var(--orange-bg); }
+.risk-high { color:var(--red); background:var(--red-bg); }
+.percentage { font-size:38px; font-weight:800; margin:12px 0; }
+.progress {
+    height:12px;
+    background:#e2e8f0;
+    border-radius:20px;
+    overflow:hidden;
+    margin:14px 0 18px;
+}
+.progress-fill {
+    width:0;
+    height:100%;
+    background:var(--primary);
+    border-radius:20px;
+    transition:width .4s ease;
+}
+.status { color:var(--muted); font-size:13px; line-height:1.7; overflow-wrap:anywhere; }
+.error { color:var(--red); }
+.metric-list { list-style:none; margin:18px 0 0; padding:0; }
+.metric-list li {
+    display:flex;
+    justify-content:space-between;
+    gap:12px;
+    padding:13px 0;
+    border-bottom:1px solid var(--border);
+    font-size:13px;
+}
+.metric-list li:last-child { border-bottom:0; }
+.metric-list span:first-child { color:var(--muted); }
+.metric-list span:last-child { font-weight:700; text-align:right; overflow-wrap:anywhere; }
+.legend {
+    margin-top:20px;
+    padding:15px;
+    border:1px solid var(--border);
+    border-radius:10px;
+    background:white;
+}
+.legend h3 { font-size:14px; margin:0 0 12px; }
+.legend-row {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    padding:7px 0;
+    font-size:13px;
+}
+.legend-row .risk-level { margin:0; padding:5px 9px; font-size:12px; }
+.history-section { margin-top:24px; }
+.history-top {
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:15px;
+    flex-wrap:wrap;
+    margin-bottom:16px;
+}
+.history-top h2 { margin:0; }
+.history-actions { display:flex; flex-wrap:wrap; gap:8px; }
+.history-search {
+    display:grid;
+    grid-template-columns:1fr auto;
+    gap:10px;
+    margin-bottom:18px;
+}
+.history-summary {
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:12px;
+    margin-bottom:18px;
+}
+.summary-card {
+    padding:16px;
+    border:1px solid var(--border);
+    border-radius:11px;
+    background:#f8fafc;
+}
+.summary-card span {
+    display:block;
+    color:var(--muted);
+    font-size:12px;
+    margin-bottom:8px;
+}
+.summary-card strong { font-size:24px; }
+.table-wrapper {
+    overflow-x:auto;
+    border:1px solid var(--border);
+    border-radius:10px;
+}
+table { border-collapse:collapse; width:100%; min-width:850px; background:white; }
+th,td {
+    padding:13px 12px;
+    text-align:left;
+    border-bottom:1px solid var(--border);
+    font-size:13px;
+}
+th { background:#f1f5f9; color:#334155; white-space:nowrap; }
+tbody tr:last-child td { border-bottom:0; }
+tbody tr:hover { background:#f8fafc; }
+.table-badge {
+    display:inline-block;
+    padding:5px 8px;
+    border-radius:6px;
+    font-size:11px;
+    font-weight:800;
+}
+.badge-low { background:var(--green-bg); color:var(--green); }
+.badge-moderate { background:var(--orange-bg); color:var(--orange); }
+.badge-high { background:var(--red-bg); color:var(--red); }
+.empty-history { padding:28px 15px; text-align:center; color:var(--muted); font-size:14px; }
+footer {
+    text-align:center;
+    color:var(--muted);
+    font-size:12px;
+    line-height:1.7;
+    padding:0 18px 25px;
+}
+@media(max-width:760px) {
+    .grid { grid-template-columns:1fr; }
+    .form-grid { grid-template-columns:1fr; }
+    .field.full { grid-column:auto; }
+    header h1 { font-size:25px; }
+    .card { padding:18px; }
+    .history-summary { grid-template-columns:1fr 1fr; }
+}
+@media(max-width:420px) {
+    .history-summary { grid-template-columns:1fr 1fr; }
+    .history-search { grid-template-columns:1fr; }
+}
 </style>
-```
 
 </head>
 
@@ -257,68 +275,56 @@
 <main>
     <div class="notice">
         <strong>Educational prototype only:</strong>
-        This tool is not clinically validated and must not be used to make
-        real patient-care decisions. Predictions depend on the model and
-        the quality of the supplied data.
+        Predictions and display categories are not clinically validated and must not be used for patient-care decisions.
+        Patient IDs are demonstration identifiers. History is stored locally in this browser, not in a hospital database.
     </div>
 
 ```
 <div class="grid">
     <section class="card">
         <h2>Patient Information</h2>
-        <p class="subtext">
-            Enter the available patient information and select
-            <strong>Predict Risk</strong>.
-        </p>
+        <p class="subtext">Enter a patient ID and the requested information.</p>
 
         <form id="predictionForm">
             <div class="form-grid">
+                <div class="field full">
+                    <label for="patientId">Patient ID *</label>
+                    <input id="patientId" type="text" maxlength="40"
+                           placeholder="Example: CP001" required>
+                    <div class="field-help">Use a unique demo ID, such as CP001 or CP002. Do not enter a patient's name.</div>
+                </div>
+
                 <div class="field">
                     <label for="time_in_hospital">Time in Hospital (days)</label>
-                    <input id="time_in_hospital" type="number"
-                           min="1" max="100" value="3" required>
+                    <input id="time_in_hospital" type="number" min="1" max="100" value="3" required>
                 </div>
-
                 <div class="field">
-                    <label for="num_lab_procedures">Number of Lab Procedures</label>
-                    <input id="num_lab_procedures" type="number"
-                           min="0" max="200" value="40" required>
+                    <label for="num_lab_procedures">Lab Procedures</label>
+                    <input id="num_lab_procedures" type="number" min="0" max="200" value="40" required>
                 </div>
-
                 <div class="field">
-                    <label for="num_procedures">Number of Procedures</label>
-                    <input id="num_procedures" type="number"
-                           min="0" max="100" value="1" required>
+                    <label for="num_procedures">Procedures</label>
+                    <input id="num_procedures" type="number" min="0" max="100" value="1" required>
                 </div>
-
                 <div class="field">
-                    <label for="num_medications">Number of Medications</label>
-                    <input id="num_medications" type="number"
-                           min="0" max="200" value="10" required>
+                    <label for="num_medications">Medications</label>
+                    <input id="num_medications" type="number" min="0" max="200" value="10" required>
                 </div>
-
                 <div class="field">
                     <label for="number_outpatient">Outpatient Visits</label>
-                    <input id="number_outpatient" type="number"
-                           min="0" max="100" value="0" required>
+                    <input id="number_outpatient" type="number" min="0" max="100" value="0" required>
                 </div>
-
                 <div class="field">
                     <label for="number_emergency">Emergency Visits</label>
-                    <input id="number_emergency" type="number"
-                           min="0" max="100" value="0" required>
+                    <input id="number_emergency" type="number" min="0" max="100" value="0" required>
                 </div>
-
                 <div class="field">
                     <label for="number_inpatient">Previous Inpatient Visits</label>
-                    <input id="number_inpatient" type="number"
-                           min="0" max="100" value="0" required>
+                    <input id="number_inpatient" type="number" min="0" max="100" value="0" required>
                 </div>
-
                 <div class="field">
                     <label for="number_diagnoses">Number of Diagnoses</label>
-                    <input id="number_diagnoses" type="number"
-                           min="1" max="100" value="5" required>
+                    <input id="number_diagnoses" type="number" min="1" max="100" value="5" required>
                 </div>
 
                 <div class="field full">
@@ -336,7 +342,6 @@
                         <option value="[90-100)">90–100</option>
                     </select>
                 </div>
-
                 <div class="field">
                     <label for="A1Cresult">HbA1c Result</label>
                     <select id="A1Cresult" required>
@@ -346,7 +351,6 @@
                         <option value=">8">Greater than 8</option>
                     </select>
                 </div>
-
                 <div class="field">
                     <label for="diabetesMed">Diabetes Medication</label>
                     <select id="diabetesMed" required>
@@ -354,7 +358,6 @@
                         <option value="No">No</option>
                     </select>
                 </div>
-
                 <div class="field full">
                     <label for="max_glu_serum">Serum Glucose Category</label>
                     <select id="max_glu_serum" required>
@@ -363,225 +366,444 @@
                         <option value=">200">Greater than 200</option>
                         <option value=">300">Greater than 300</option>
                     </select>
-                    <div class="field-help">
-                        Select the category recorded in the dataset.
-                        This is a category, not a numeric glucometer reading.
-                    </div>
+                    <div class="field-help">Select the category recorded in the dataset. This is not an exact glucometer reading.</div>
                 </div>
             </div>
 
-            <button id="predictButton" type="submit">Predict Risk</button>
+            <button id="predictButton" class="primary-button" type="submit">Predict Risk</button>
         </form>
     </section>
 
     <section class="card">
         <h2>Prediction Result</h2>
-        <p class="subtext">
-            The result appears here after the backend responds.
-        </p>
+        <p class="subtext">The result appears here after the backend responds.</p>
 
         <div class="result-box" aria-live="polite">
-            <div class="result-label">Estimated Risk Category</div>
+            <div class="result-label">Patient ID</div>
+            <div id="resultPatientId" style="font-size:20px;font-weight:800;margin:10px 0 20px;">—</div>
+
+            <div class="result-label">Estimated Display Category</div>
             <div id="riskLevel" class="risk-level">Waiting for input</div>
 
             <div class="result-label">Model Risk Percentage</div>
             <div id="riskPercentage" class="percentage">—</div>
-
-            <div class="progress">
-                <div id="progressFill" class="progress-fill"></div>
-            </div>
-
-            <p id="resultStatus" class="status">
-                Enter the details and click Predict Risk.
-            </p>
+            <div class="progress"><div id="progressFill" class="progress-fill"></div></div>
+            <p id="resultStatus" class="status">Enter the details and click Predict Risk.</p>
         </div>
 
         <ul class="metric-list">
-            <li>
-                <span>Model Decision</span>
-                <span id="predictedReadmission">—</span>
-            </li>
-            <li>
-                <span>Decision Threshold</span>
-                <span id="decisionThreshold">—</span>
-            </li>
-            <li>
-                <span>Backend Status</span>
-                <span id="backendStatus">Checking…</span>
-            </li>
+            <li><span>Model Decision</span><span id="predictedReadmission">—</span></li>
+            <li><span>Model Decision Threshold</span><span id="decisionThreshold">—</span></li>
+            <li><span>Backend Status</span><span id="backendStatus">Checking…</span></li>
         </ul>
+
+        <div class="legend">
+            <h3>Dashboard Display Categories</h3>
+            <div class="legend-row"><span class="risk-level risk-low">LOW</span><span>0%–30%</span></div>
+            <div class="legend-row"><span class="risk-level risk-medium">MODERATE</span><span>Above 30%–55%</span></div>
+            <div class="legend-row"><span class="risk-level risk-high">HIGH</span><span>Above 55%–100%</span></div>
+        </div>
     </section>
 </div>
+
+<section class="card history-section">
+    <div class="history-top">
+        <div>
+            <h2>Patient Prediction History</h2>
+            <p class="subtext" style="margin:8px 0 0">Search for a Patient ID or review all recorded predictions.</p>
+        </div>
+        <div class="history-actions">
+            <button id="exportButton" class="secondary-button" type="button">Download CSV</button>
+            <button id="clearButton" class="danger-button" type="button">Clear History</button>
+        </div>
+    </div>
+
+    <div class="history-search">
+        <input id="historySearch" type="search" placeholder="Search Patient ID, e.g. CP001">
+        <button id="searchButton" type="button">Search</button>
+    </div>
+
+    <div class="history-summary">
+        <div class="summary-card"><span>Total Records</span><strong id="totalCount">0</strong></div>
+        <div class="summary-card"><span>Low</span><strong id="lowCount">0</strong></div>
+        <div class="summary-card"><span>Moderate</span><strong id="moderateCount">0</strong></div>
+        <div class="summary-card"><span>High</span><strong id="highCount">0</strong></div>
+    </div>
+
+    <div id="historyContainer"></div>
+    <p class="status">Browser-local demonstration history only. Do not enter confidential patient information.</p>
+</section>
 ```
 
 </main>
 
 <footer>
-    CarePredict AI — student project prototype. Not for diagnosis,
-    treatment, discharge, or other clinical decisions.
+    CarePredict AI — student project prototype.<br>
+    Not for diagnosis, treatment, discharge, or other clinical decisions.
 </footer>
 
 <script>
-    const API_URL = "https://carepredict-ai-8fic.onrender.com";
+"use strict";
 
-    const form = document.getElementById("predictionForm");
-    const predictButton = document.getElementById("predictButton");
+const API_URL = "http://127.0.0.1:5001";
+const STORAGE_KEY = "carePredictPatientHistoryV2";
 
-    const riskLevelElement = document.getElementById("riskLevel");
-    const riskPercentageElement = document.getElementById("riskPercentage");
-    const progressFill = document.getElementById("progressFill");
-    const resultStatus = document.getElementById("resultStatus");
-    const predictedReadmissionElement = document.getElementById("predictedReadmission");
-    const decisionThresholdElement = document.getElementById("decisionThreshold");
-    const backendStatusElement = document.getElementById("backendStatus");
+const form = document.getElementById("predictionForm");
+const predictButton = document.getElementById("predictButton");
+const riskLevelElement = document.getElementById("riskLevel");
+const riskPercentageElement = document.getElementById("riskPercentage");
+const progressFill = document.getElementById("progressFill");
+const resultStatus = document.getElementById("resultStatus");
+const predictedReadmissionElement = document.getElementById("predictedReadmission");
+const decisionThresholdElement = document.getElementById("decisionThreshold");
+const backendStatusElement = document.getElementById("backendStatus");
+const historyContainer = document.getElementById("historyContainer");
+const historySearch = document.getElementById("historySearch");
 
-    function normalizeRiskLevel(value) {
-        const risk = String(value || "").toUpperCase();
+let predictionHistory = loadHistory();
 
-        if (risk.includes("HIGH")) return "HIGH";
-        if (risk.includes("MEDIUM") || risk.includes("MODERATE")) return "MEDIUM";
-        if (risk.includes("LOW")) return "LOW";
+function loadHistory() {
+    try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        const parsed = saved ? JSON.parse(saved) : [];
+        return Array.isArray(parsed) ? parsed : [];
+    } catch (error) {
+        console.error("History loading error:", error);
+        return [];
+    }
+}
 
-        return risk || "UNKNOWN";
+function saveHistory() {
+    try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(predictionHistory));
+        return true;
+    } catch (error) {
+        console.error("History saving error:", error);
+        alert("Could not save history. Browser storage may be unavailable or full.");
+        return false;
+    }
+}
+
+function classifyRisk(percentage) {
+    if (percentage <= 30) return "LOW";
+    if (percentage <= 55) return "MODERATE";
+    return "HIGH";
+}
+
+function setRiskStyle(level) {
+    riskLevelElement.classList.remove("risk-low", "risk-medium", "risk-high");
+    if (level === "LOW") riskLevelElement.classList.add("risk-low");
+    else if (level === "MODERATE") riskLevelElement.classList.add("risk-medium");
+    else if (level === "HIGH") riskLevelElement.classList.add("risk-high");
+}
+
+function buildPayload() {
+    return {
+        time_in_hospital: Number(document.getElementById("time_in_hospital").value),
+        num_lab_procedures: Number(document.getElementById("num_lab_procedures").value),
+        num_procedures: Number(document.getElementById("num_procedures").value),
+        num_medications: Number(document.getElementById("num_medications").value),
+        number_outpatient: Number(document.getElementById("number_outpatient").value),
+        number_emergency: Number(document.getElementById("number_emergency").value),
+        number_inpatient: Number(document.getElementById("number_inpatient").value),
+        number_diagnoses: Number(document.getElementById("number_diagnoses").value),
+        age: document.getElementById("age").value,
+        A1Cresult: document.getElementById("A1Cresult").value,
+        diabetesMed: document.getElementById("diabetesMed").value,
+        max_glu_serum: document.getElementById("max_glu_serum").value
+    };
+}
+
+function showError(message) {
+    riskLevelElement.textContent = "Prediction unavailable";
+    riskLevelElement.className = "risk-level error";
+    riskPercentageElement.textContent = "—";
+    progressFill.style.width = "0%";
+    predictedReadmissionElement.textContent = "—";
+    decisionThresholdElement.textContent = "—";
+    resultStatus.textContent = message;
+    resultStatus.className = "status error";
+}
+
+async function checkBackend() {
+    try {
+        const response = await fetch(`${API_URL}/health`);
+        if (!response.ok) throw new Error("Health check failed");
+        const data = await response.json();
+        backendStatusElement.textContent =
+            data.model_loaded && data.status === "online"
+                ? `Online — ${data.model_name || "Model loaded"}`
+                : "Model unavailable";
+    } catch (error) {
+        backendStatusElement.textContent = "Unavailable";
+    }
+}
+
+function makeCell(value) {
+    const cell = document.createElement("td");
+    cell.textContent = String(value ?? "");
+    return cell;
+}
+
+function renderHistory() {
+    const query = historySearch.value.trim().toLowerCase();
+
+    const filtered = predictionHistory.filter(item =>
+        String(item.patientId).toLowerCase().includes(query)
+    );
+
+    document.getElementById("totalCount").textContent = predictionHistory.length;
+    document.getElementById("lowCount").textContent =
+        predictionHistory.filter(item => item.category === "LOW").length;
+    document.getElementById("moderateCount").textContent =
+        predictionHistory.filter(item => item.category === "MODERATE").length;
+    document.getElementById("highCount").textContent =
+        predictionHistory.filter(item => item.category === "HIGH").length;
+
+    historyContainer.replaceChildren();
+
+    if (filtered.length === 0) {
+        const empty = document.createElement("div");
+        empty.className = "empty-history";
+        empty.textContent = predictionHistory.length === 0
+            ? "No predictions yet. Enter a Patient ID and make a prediction."
+            : "No records match that Patient ID.";
+        historyContainer.appendChild(empty);
+        return;
     }
 
-    function setRiskStyle(level) {
-        riskLevelElement.classList.remove("risk-low", "risk-medium", "risk-high");
+    const wrapper = document.createElement("div");
+    wrapper.className = "table-wrapper";
+    const table = document.createElement("table");
+    const thead = document.createElement("thead");
+    const headerRow = document.createElement("tr");
 
-        if (level === "LOW" || level === "LOWER") {
-            riskLevelElement.classList.add("risk-low");
-        } else if (level === "MEDIUM" || level === "MODERATE") {
-            riskLevelElement.classList.add("risk-medium");
-        } else if (level === "HIGH" || level === "ELEVATED") {
-            riskLevelElement.classList.add("risk-high");
-        }
-    }
+    ["Patient ID", "Date & Time", "Risk Category", "Risk Percentage", "Model Decision", "Hospital Days"]
+        .forEach(label => {
+            const th = document.createElement("th");
+            th.textContent = label;
+            headerRow.appendChild(th);
+        });
 
-    async function checkBackend() {
-        try {
-            const response = await fetch(`${API_URL}/health`);
-            if (!response.ok) throw new Error("Backend returned an error");
+    thead.appendChild(headerRow);
+    table.appendChild(thead);
 
-            const data = await response.json();
-            backendStatusElement.textContent =
-                data.status === "online" && data.model_loaded
-                    ? "Online — model loaded"
-                    : "Online — check model status";
-        } catch (error) {
-            backendStatusElement.textContent = "Unavailable";
-        }
-    }
+    const tbody = document.createElement("tbody");
 
-    function getNumber(id) {
-        return Number(document.getElementById(id).value);
-    }
+    filtered.forEach(item => {
+        const row = document.createElement("tr");
+        row.appendChild(makeCell(item.patientId));
+        row.appendChild(makeCell(new Date(item.timestamp).toLocaleString()));
 
-    function buildPayload() {
-        return {
-            time_in_hospital: getNumber("time_in_hospital"),
-            num_lab_procedures: getNumber("num_lab_procedures"),
-            num_procedures: getNumber("num_procedures"),
-            num_medications: getNumber("num_medications"),
-            number_outpatient: getNumber("number_outpatient"),
-            number_emergency: getNumber("number_emergency"),
-            number_inpatient: getNumber("number_inpatient"),
-            number_diagnoses: getNumber("number_diagnoses"),
-            age: document.getElementById("age").value,
-            A1Cresult: document.getElementById("A1Cresult").value,
-            diabetesMed: document.getElementById("diabetesMed").value,
-            max_glu_serum: document.getElementById("max_glu_serum").value
-        };
-    }
+        const categoryCell = document.createElement("td");
+        const badge = document.createElement("span");
+        badge.className = "table-badge " +
+            (item.category === "LOW" ? "badge-low" :
+             item.category === "MODERATE" ? "badge-moderate" : "badge-high");
+        badge.textContent = item.category;
+        categoryCell.appendChild(badge);
+        row.appendChild(categoryCell);
 
-    function showError(message) {
-        riskLevelElement.textContent = "Prediction unavailable";
-        riskLevelElement.className = "risk-level error";
-        riskPercentageElement.textContent = "—";
-        progressFill.style.width = "0%";
-        predictedReadmissionElement.textContent = "—";
-        decisionThresholdElement.textContent = "—";
-        resultStatus.textContent = message;
-        resultStatus.className = "status error";
-    }
-
-    form.addEventListener("submit", async function (event) {
-        event.preventDefault();
-
-        predictButton.disabled = true;
-        predictButton.textContent = "Predicting…";
-        resultStatus.className = "status";
-        resultStatus.textContent = "Sending information to the model…";
-
-        try {
-            const response = await fetch(`${API_URL}/predict`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(buildPayload())
-            });
-
-            const data = await response.json();
-
-            if (!response.ok) {
-                throw new Error(data.error || data.message || "Prediction request failed.");
-            }
-
-            const rawRisk = data.risk_level || data.risk || "UNKNOWN";
-            const risk = normalizeRiskLevel(rawRisk);
-
-            riskLevelElement.textContent = rawRisk;
-            riskLevelElement.className = "risk-level";
-            setRiskStyle(rawRisk.toUpperCase());
-
-            const rawPercentage = Number(data.risk_percentage);
-            const percentageIsValid =
-                data.risk_percentage !== undefined &&
-                data.risk_percentage !== null &&
-                Number.isFinite(rawPercentage);
-
-            if (percentageIsValid) {
-                const safePercentage = Math.max(0, Math.min(100, rawPercentage));
-                riskPercentageElement.textContent = `${safePercentage.toFixed(1)}%`;
-                progressFill.style.width = `${safePercentage}%`;
-            } else {
-                riskPercentageElement.textContent = "Not provided";
-                progressFill.style.width = "0%";
-            }
-
-            if (data.predicted_readmission !== undefined) {
-                predictedReadmissionElement.textContent =
-                    String(data.predicted_readmission);
-            } else {
-                predictedReadmissionElement.textContent = "Not provided";
-            }
-
-            if (data.decision_threshold !== undefined &&
-                data.decision_threshold !== null) {
-                decisionThresholdElement.textContent =
-                    String(data.decision_threshold);
-            } else {
-                decisionThresholdElement.textContent = "Not provided";
-            }
-
-            resultStatus.textContent =
-                data.message ||
-                "Prediction returned by the educational model. This result is not a clinical assessment.";
-
-            if (data.glucose_note) {
-                resultStatus.textContent += " " + data.glucose_note;
-            }
-        } catch (error) {
-            showError(
-                `Could not get a prediction: ${error.message}. Check your internet connection and backend status.`
-            );
-        } finally {
-            predictButton.disabled = false;
-            predictButton.textContent = "Predict Risk";
-        }
+        row.appendChild(makeCell(`${Number(item.percentage).toFixed(1)}%`));
+        row.appendChild(makeCell(item.modelDecision));
+        row.appendChild(makeCell(item.hospitalDays));
+        tbody.appendChild(row);
     });
 
-    checkBackend();
+    table.appendChild(tbody);
+    wrapper.appendChild(table);
+    historyContainer.appendChild(wrapper);
+}
+
+function csvEscape(value) {
+    return '"' + String(value ?? "").replace(/"/g, '""') + '"';
+}
+
+function exportHistory() {
+    if (predictionHistory.length === 0) {
+        alert("There is no history to download yet.");
+        return;
+    }
+
+    const headers = [
+        "Patient ID", "Date and Time", "Risk Category", "Risk Percentage",
+        "Model Decision", "Decision Threshold", "Time in Hospital",
+        "Lab Procedures", "Procedures", "Medications", "Outpatient Visits",
+        "Emergency Visits", "Previous Inpatient Visits", "Number of Diagnoses",
+        "Age Group", "HbA1c Result", "Diabetes Medication", "Serum Glucose Category"
+    ];
+
+    const rows = predictionHistory.map(item => [
+        item.patientId,
+        new Date(item.timestamp).toLocaleString(),
+        item.category,
+        Number(item.percentage).toFixed(1),
+        item.modelDecision,
+        item.threshold,
+        item.payload.time_in_hospital,
+        item.payload.num_lab_procedures,
+        item.payload.num_procedures,
+        item.payload.num_medications,
+        item.payload.number_outpatient,
+        item.payload.number_emergency,
+        item.payload.number_inpatient,
+        item.payload.number_diagnoses,
+        item.payload.age,
+        item.payload.A1Cresult,
+        item.payload.diabetesMed,
+        item.payload.max_glu_serum
+    ]);
+
+    const csv = [headers, ...rows]
+        .map(row => row.map(csvEscape).join(","))
+        .join("\r\n");
+
+    const blob = new Blob(["\uFEFF" + csv], {type:"text/csv;charset=utf-8;"});
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "carepredict_patient_prediction_history.csv";
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(url);
+}
+
+document.getElementById("searchButton").addEventListener("click", renderHistory);
+historySearch.addEventListener("input", renderHistory);
+document.getElementById("exportButton").addEventListener("click", exportHistory);
+
+document.getElementById("clearButton").addEventListener("click", function() {
+    if (predictionHistory.length === 0) {
+        alert("History is already empty.");
+        return;
+    }
+
+    if (!confirm("Delete all saved prediction history from this browser? This cannot be undone.")) {
+        return;
+    }
+
+    predictionHistory = [];
+    saveHistory();
+    renderHistory();
+});
+
+form.addEventListener("submit", async function(event) {
+    event.preventDefault();
+
+    const patientId = document.getElementById("patientId").value.trim();
+
+    if (!patientId) {
+        alert("Please enter a Patient ID.");
+        document.getElementById("patientId").focus();
+        return;
+    }
+
+    predictButton.disabled = true;
+    predictButton.textContent = "Predicting…";
+    resultStatus.className = "status";
+    resultStatus.textContent = "Sending information to the model…";
+
+    try {
+        const payload = buildPayload();
+
+        const response = await fetch(`${API_URL}/predict`, {
+            method:"POST",
+            headers:{"Content-Type":"application/json"},
+            body:JSON.stringify(payload)
+        });
+
+        let data;
+        try {
+            data = await response.json();
+        } catch (error) {
+            throw new Error("The backend did not return valid JSON.");
+        }
+
+        if (!response.ok || data.status === "error") {
+            throw new Error(data.message || data.error || "Prediction request failed.");
+        }
+
+        if (data.risk_percentage === undefined ||
+            data.risk_percentage === null ||
+            !Number.isFinite(Number(data.risk_percentage))) {
+            throw new Error("The backend did not return a valid risk percentage.");
+        }
+
+        const percentage = Math.max(0, Math.min(100, Number(data.risk_percentage)));
+        const category = classifyRisk(percentage);
+
+        document.getElementById("resultPatientId").textContent = patientId;
+        riskLevelElement.textContent = category;
+        riskLevelElement.className = "risk-level";
+        setRiskStyle(category);
+
+        riskPercentageElement.textContent = `${percentage.toFixed(1)}%`;
+        progressFill.style.width = `${percentage}%`;
+        progressFill.style.background =
+            category === "LOW" ? "#15803d" :
+            category === "MODERATE" ? "#d97706" : "#b91c1c";
+
+        const decisionValue = data.predicted_readmission;
+        const modelDecision =
+            decisionValue === undefined || decisionValue === null
+                ? "Not provided"
+                : (
+                    decisionValue === true ||
+                    decisionValue === 1 ||
+                    ["yes", "true", "1"].includes(String(decisionValue).toLowerCase())
+                    ? "Yes" : "No"
+                );
+
+        predictedReadmissionElement.textContent = modelDecision;
+
+        let threshold = "Not provided";
+        if (data.decision_threshold !== undefined &&
+            data.decision_threshold !== null &&
+            Number.isFinite(Number(data.decision_threshold))) {
+            threshold = `${(Number(data.decision_threshold) * 100).toFixed(1)}%`;
+        }
+        decisionThresholdElement.textContent = threshold;
+
+        resultStatus.className = "status";
+        resultStatus.textContent =
+            (data.message || "Prediction received successfully.") +
+            ` Patient ID: ${patientId}. Display category: ${category}. This educational output is not clinically validated.`;
+
+        backendStatusElement.textContent = "Online — prediction received";
+
+        predictionHistory.unshift({
+            patientId: patientId,
+            timestamp: new Date().toISOString(),
+            category: category,
+            percentage: percentage,
+            modelDecision: modelDecision,
+            threshold: threshold,
+            hospitalDays: payload.time_in_hospital,
+            payload: payload
+        });
+
+        if (predictionHistory.length > 500) {
+            predictionHistory = predictionHistory.slice(0, 500);
+        }
+
+        saveHistory();
+        renderHistory();
+
+    } catch (error) {
+        showError(
+            "Could not get a prediction: " + error.message +
+            ". Check that the backend is running at " + API_URL + " and try again."
+        );
+        backendStatusElement.textContent = "Check connection";
+    } finally {
+        predictButton.disabled = false;
+        predictButton.textContent = "Predict Risk";
+    }
+});
+
+renderHistory();
+checkBackend();
 </script>
 
 </body>
