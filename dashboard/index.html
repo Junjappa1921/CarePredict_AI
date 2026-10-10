@@ -277,6 +277,7 @@ footer {
         <strong>Educational prototype only:</strong>
         Predictions and display categories are not clinically validated and must not be used for patient-care decisions.
         Patient IDs are demonstration identifiers. History is stored locally in this browser, not in a hospital database.
+        The LOW, MODERATE, and HIGH labels use demonstration-only display thresholds.
     </div>
 
 ```
@@ -399,9 +400,9 @@ footer {
 
         <div class="legend">
             <h3>Dashboard Display Categories</h3>
-            <div class="legend-row"><span class="risk-level risk-low">LOW</span><span>0%–30%</span></div>
-            <div class="legend-row"><span class="risk-level risk-medium">MODERATE</span><span>Above 30%–55%</span></div>
-            <div class="legend-row"><span class="risk-level risk-high">HIGH</span><span>Above 55%–100%</span></div>
+            <div class="legend-row"><span class="risk-level risk-low">LOW</span><span>Below 20%</span></div>
+            <div class="legend-row"><span class="risk-level risk-medium">MODERATE</span><span>20%–40%</span></div>
+            <div class="legend-row"><span class="risk-level risk-high">HIGH</span><span>Above 40%–100%</span></div>
         </div>
     </section>
 </div>
@@ -484,9 +485,11 @@ function saveHistory() {
     }
 }
 
+/* Demonstration-only display categories.
+   These thresholds do not change the model's prediction or score. */
 function classifyRisk(percentage) {
-    if (percentage <= 30) return "LOW";
-    if (percentage <= 55) return "MODERATE";
+    if (percentage < 20) return "LOW";
+    if (percentage <= 40) return "MODERATE";
     return "HIGH";
 }
 
@@ -530,6 +533,7 @@ async function checkBackend() {
         const response = await fetch(`${API_URL}/health`);
         if (!response.ok) throw new Error("Health check failed");
         const data = await response.json();
+
         backendStatusElement.textContent =
             data.model_loaded && data.status === "online"
                 ? `Online — ${data.model_name || "Model loaded"}`
@@ -574,6 +578,7 @@ function renderHistory() {
 
     const wrapper = document.createElement("div");
     wrapper.className = "table-wrapper";
+
     const table = document.createElement("table");
     const thead = document.createElement("thead");
     const headerRow = document.createElement("tr");
@@ -597,9 +602,11 @@ function renderHistory() {
 
         const categoryCell = document.createElement("td");
         const badge = document.createElement("span");
+
         badge.className = "table-badge " +
             (item.category === "LOW" ? "badge-low" :
              item.category === "MODERATE" ? "badge-moderate" : "badge-high");
+
         badge.textContent = item.category;
         categoryCell.appendChild(badge);
         row.appendChild(categoryCell);
@@ -658,14 +665,19 @@ function exportHistory() {
         .map(row => row.map(csvEscape).join(","))
         .join("\r\n");
 
-    const blob = new Blob(["\uFEFF" + csv], {type:"text/csv;charset=utf-8;"});
+    const blob = new Blob(["\uFEFF" + csv], {
+        type:"text/csv;charset=utf-8;"
+    });
+
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
     link.download = "carepredict_patient_prediction_history.csv";
+
     document.body.appendChild(link);
     link.click();
     link.remove();
+
     URL.revokeObjectURL(url);
 }
 
@@ -714,6 +726,7 @@ form.addEventListener("submit", async function(event) {
         });
 
         let data;
+
         try {
             data = await response.json();
         } catch (error) {
@@ -734,6 +747,7 @@ form.addEventListener("submit", async function(event) {
         const category = classifyRisk(percentage);
 
         document.getElementById("resultPatientId").textContent = patientId;
+
         riskLevelElement.textContent = category;
         riskLevelElement.className = "risk-level";
         setRiskStyle(category);
@@ -745,6 +759,7 @@ form.addEventListener("submit", async function(event) {
             category === "MODERATE" ? "#d97706" : "#b91c1c";
 
         const decisionValue = data.predicted_readmission;
+
         const modelDecision =
             decisionValue === undefined || decisionValue === null
                 ? "Not provided"
@@ -758,17 +773,20 @@ form.addEventListener("submit", async function(event) {
         predictedReadmissionElement.textContent = modelDecision;
 
         let threshold = "Not provided";
+
         if (data.decision_threshold !== undefined &&
             data.decision_threshold !== null &&
             Number.isFinite(Number(data.decision_threshold))) {
             threshold = `${(Number(data.decision_threshold) * 100).toFixed(1)}%`;
         }
+
         decisionThresholdElement.textContent = threshold;
 
         resultStatus.className = "status";
         resultStatus.textContent =
             (data.message || "Prediction received successfully.") +
-            ` Patient ID: ${patientId}. Display category: ${category}. This educational output is not clinically validated.`;
+            ` Patient ID: ${patientId}. Display category: ${category}.` +
+            " These demonstration categories are not clinically validated.";
 
         backendStatusElement.textContent = "Online — prediction received";
 
@@ -795,6 +813,7 @@ form.addEventListener("submit", async function(event) {
             "Could not get a prediction: " + error.message +
             ". Check that the backend is running at " + API_URL + " and try again."
         );
+
         backendStatusElement.textContent = "Check connection";
     } finally {
         predictButton.disabled = false;
